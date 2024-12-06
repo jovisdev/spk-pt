@@ -1,12 +1,8 @@
 import Infouser from "../components/info-user";
 import { useState } from "react";
+import { alternatif } from "../utility/data";
 
-const items = [
-    { id: 1, nama: 'Rizky', telepon: '08977777765', kelamin: 'laki laki' },
-    { id: 2, nama: 'Dedek', telepon: '08977777765', kelamin: 'laki laki' },
-    { id: 3, nama: 'Fikri', telepon: '08977777765', kelamin: 'laki laki' },
-    { id: 4, nama: 'Rizal', telepon: '08977777765', kelamin: 'laki laki' },
-];
+const items = alternatif
 
 export default function Alternatif() {
 
@@ -47,18 +43,22 @@ export default function Alternatif() {
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
+                                    <th scope="col" className="px-6 py-3">Id</th>
                                     <th scope="col" className="px-6 py-3">Nama</th>
-                                    <th scope="col" className="px-6 py-3">Telepon</th>
                                     <th scope="col" className="px-6 py-3">Kelamin</th>
+                                    <th scope="col" className="px-6 py-3">Alamat</th>
+                                    <th scope="col" className="px-6 py-3">Usia</th>
                                     <th scope="col" className="px-6 py-3">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {items.map((item) => (
                                     <tr key={item.id} className="odd:bg-white even:bg-gray-50 border-b">
+                                        <td className="px-6 py-4">{item.id}</td>
                                         <td className="px-6 py-4">{item.nama}</td>
-                                        <td className="px-6 py-4">{item.telepon}</td>
                                         <td className="px-6 py-4">{item.kelamin}</td>
+                                        <td className="px-6 py-4">{item.alamat}</td>
+                                        <td className="px-6 py-4">{item.usia}</td>
                                         <td class="px-6 py-4 space-x-2">
                                             <button onClick={() => toggleForm(item)} class="font-medium text-blue-600 hover:underline">Ubah</button>
                                             <button href="#" class="font-medium text-red-600 hover:underline">Hapus</button>
@@ -67,6 +67,13 @@ export default function Alternatif() {
                                 ))}
                             </tbody>
                         </table>
+                        <div className="flex justify-end m-2">
+                            <button
+                                className="bg-gray-800 text-white text-sm p-2 rounded transition hover:bg-gray-700"
+                            >
+                                Simpan
+                            </button>
+                        </div>
                     </div>
                 </div>
                 {isOpen && (

@@ -98,8 +98,8 @@ export default function Sidenav() {
           <ul className="space-y-2 font-medium">
             {/* Dashboard menu */}
             <li>
-              <a
-                className={`flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
+              <button
+                className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
                   isActive('/dashboard') ? 'bg-gray-200 text-gray-900' : 'text-gray-900'
                 }`}
                 onClick={() => navigate('/dashboard')}
@@ -111,12 +111,12 @@ export default function Sidenav() {
 
 
                 <span className="ms-3">Dashboard</span>
-              </a>
+              </button>
             </li>
 
             <li>
-              <a
-                className={`flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
+              <button
+                className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
                   isActive('/kriteria') ? 'bg-gray-200 text-gray-900' : 'text-gray-900'
                 }`}
                 onClick={() => navigate('/kriteria')}
@@ -134,12 +134,35 @@ export default function Sidenav() {
                 </svg>
 
                 <span className="ms-3">Data Kriteria</span>
-              </a>
+              </button>
             </li>
 
             <li>
-              <a
-                className={`flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
+              <button
+                className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
+                  isActive('/subkriteria') ? 'bg-gray-200 text-gray-900' : 'text-gray-900'
+                }`}
+                onClick={() => navigate('/subkriteria')}
+              >
+                <svg className="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" id="Checklist">
+                  <rect width="34" height="40" x="7" y="5" fill="#7e7e7e" rx="5" class="color13e4ea svgShape"></rect>
+                  <rect width="26" height="32" x="11" y="9" fill="#f7f7f7" rx="2" class="colorf9f5f5 svgShape"></rect>
+                  <path fill="#7e7e7e" d="M32 34H25a1 1 0 010-2h7a1 1 0 010 2zM30 30H25a1 1 0 010-2h5a1 1 0 010 2zM32 23H25a1 1 0 010-2h7a1 1 0 010 2zM30 19H25a1 1 0 010-2h5a1 1 0 010 2z" class="color13e4ea svgShape"></path>
+                  <path fill="#d4d4d4" d="M30.349,3h-12.7a3,3,0,0,0-2.884,3.824l.857,3A3.014,3.014,0,0,0,18.509,12H29.491a3.014,3.014,0,0,0,2.885-2.176l.857-3A3,3,0,0,0,30.349,3Z" class="coloraff9f7 svgShape"></path>
+                  <rect width="6" height="6" x="16" y="17" fill="#7e7e7e" rx="1.714" class="color13e4ea svgShape"></rect>
+                  <rect width="6" height="6" x="16" y="28" fill="#7e7e7e" rx="1.714" class="color13e4ea svgShape"></rect>
+                  <path fill="#757575" d="M36,45H12a5.006,5.006,0,0,1-5-5V10a5.006,5.006,0,0,1,5-5h3.65a1,1,0,0,1,0,2H12a3,3,0,0,0-3,3V40a3,3,0,0,0,3,3H36a3,3,0,0,0,3-3V10a3,3,0,0,0-3-3H32.35a1,1,0,0,1,0-2H36a5.006,5.006,0,0,1,5,5V40A5.006,5.006,0,0,1,36,45Z" class="color007da1 svgShape"></path>
+                  <path fill="#757575" d="M35,41H13a2,2,0,0,1-2-2V11a2,2,0,0,1,2-2h3.79a1,1,0,0,1,0,2H13V39H35V11H31.22a1,1,0,0,1,0-2H35a2,2,0,0,1,2,2V39A2,2,0,0,1,35,41Z" class="color007da1 svgShape"></path>
+                  <path fill="#757575" d="M29.491,12H18.509a3.014,3.014,0,0,1-2.885-2.175l-.857-3A3,3,0,0,1,17.651,3h12.7a3,3,0,0,1,2.884,3.824l-.857,3A3.014,3.014,0,0,1,29.491,12ZM17.651,5a1,1,0,0,0-.961,1.275l.857,3a1,1,0,0,0,.962.725H29.491a1,1,0,0,0,.961-.725l.858-3A1,1,0,0,0,30.349,5Z" class="color007da1 svgShape"></path>
+                </svg>
+
+                <span className="ms-3">Data Sub Kriteria</span>
+              </button>
+            </li>
+
+            <li>
+              <button
+                className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
                   isActive('/alternatif') ? 'bg-gray-200 text-gray-900' : 'text-gray-900'
                 }`}
                 onClick={() => navigate('/alternatif')}
@@ -149,12 +172,12 @@ export default function Sidenav() {
                 </svg>
 
                 <span className="ms-3">Alternatif</span>
-              </a>
+              </button>
             </li>
 
             <li>
-              <a
-                className={`flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
+              <button
+                className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
                   isActive('/penilaian') ? 'bg-gray-200 text-gray-900' : 'text-gray-900'
                 }`}
                 onClick={() => navigate('/penilaian')}
@@ -165,12 +188,12 @@ export default function Sidenav() {
                 </svg>
 
                 <span className="ms-3">Penilaian</span>
-              </a>
+              </button>
             </li>
 
             <li>
-              <a
-                className={`flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
+              <button
+                className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
                   isActive('/datakeputusan') ? 'bg-gray-200 text-gray-900' : 'text-gray-900'
                 }`}
                 onClick={() => navigate('/datakeputusan')}
@@ -181,12 +204,12 @@ export default function Sidenav() {
                 </svg>
 
                 <span className="ms-3">Data Keputusan</span>
-              </a>
+              </button>
             </li>
 
             <li>
-              <a
-                className={`flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
+              <button
+                className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
                   isActive('/logout') ? 'bg-gray-200 text-gray-900' : 'text-gray-900'
                 }`}
                 onClick={() => navigate('/logout')}
@@ -197,7 +220,7 @@ export default function Sidenav() {
                 </svg>
 
                 <span className="ms-3">Logout</span>
-              </a>
+              </button>
             </li>
           </ul>
         </div>

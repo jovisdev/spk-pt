@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function Signin(){
+    const navigate = useNavigate()
     return(
         <>
             <div className="rounded-sm border border-stroke shadow-default h-screen">
@@ -24,7 +25,7 @@ export default function Signin(){
                     <form>
                         <div className="mb-4">
                         <label className="mb-2.5 block font-medium text-gray-700">
-                            Email
+                            Username
                         </label>
                         <div className="relative">
                             <input
@@ -55,7 +56,7 @@ export default function Signin(){
 
                         <div className="mb-6">
                         <label className="mb-2.5 block font-medium text-gray-700">
-                            Re-type Password
+                            Password
                         </label>
                         <div className="relative">
                             <input
@@ -89,20 +90,10 @@ export default function Signin(){
                         </div>
 
                         <div className="mb-5">
-                        <input
-                            type="submit"
-                            value="Sign In"
+                        <button
+                            onClick={()=>navigate('/dashboard')}
                             className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90 bg-black"
-                        />
-                        </div>
-
-                        <div className="mt-6 text-center">
-                        <p>
-                            Don’t have any account?{' '}
-                            <Link to="/auth/signup" className="text-primary">
-                            Sign Up
-                            </Link>
-                        </p>
+                        >SignIn</button>
                         </div>
                     </form>
                     </div>

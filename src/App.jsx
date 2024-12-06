@@ -7,6 +7,7 @@ import Sidenav from "./components/Sidenav"
 import Kriteria from "./pages/Data-kriteria"
 import Alternatif from "./pages/Data-alternatif"
 import Penilaian from "./pages/Data-penilaian"
+import SubKriteria from "./pages/Data-subkriteria"
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/signin" element={<Signin/>}/>
         <Route path="/kriteria" element={<Kriteria/>}/>
+        <Route path="/subkriteria" element={<SubKriteria/>}/>
         <Route path="/alternatif" element={<Alternatif/>}/>
         <Route path="/penilaian" element={<Penilaian/>}/>
       </Routes>

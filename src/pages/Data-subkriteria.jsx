@@ -4,7 +4,7 @@ import { kriteria } from "../utility/data";
 
 const items = kriteria
 
-export default function Kriteria() {
+export default function SubKriteria() {
 
     const [isOpen, setIsOpen] = useState(false);
     const toggleForm = (item) => {
