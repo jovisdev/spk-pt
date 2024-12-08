@@ -68,9 +68,10 @@ export default function Kriteria() {
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope="col" className="px-6 py-3">Kode</th>
+                                    <th scope="col" className="px-6 py-3 w-1">Kode</th>
                                     <th scope="col" className="px-6 py-3">Kriteria</th>
                                     <th scope="col" className="px-6 py-3">Kategori</th>
+                                    <th scope="col" className="px-6 py-3">Tipe</th>
                                     <th scope="col" className="px-6 py-3">Bobot</th>
                                     <th scope="col" className="px-6 py-3">Aksi</th>
                                 </tr>
@@ -78,9 +79,10 @@ export default function Kriteria() {
                             <tbody>
                                 {items.map((item) => (
                                     <tr key={item.id} className="odd:bg-white even:bg-gray-50 border-b">
-                                        <td className="px-6 py-4">{item.id}</td>
+                                        <td className="px-6 py-4 w-1">{item.id}</td>
                                         <td className="px-6 py-4">{item.kriteria}</td>
                                         <td className="px-6 py-4">{item.kategori}</td>
+                                        <td className="px-6 py-4">{item.tipe}</td>
                                         <td className="px-6 py-4">{item.bobot}</td>
                                         <td className="px-6 py-4 space-x-2">
                                             <button
@@ -101,7 +103,7 @@ export default function Kriteria() {
                             </tbody>
                             <tfoot>
                                 <tr className="bg-gray-100 border-t">
-                                    <td colSpan="3" className="px-6 py-4 font-semibold text-gray-700">
+                                    <td colSpan="4" className="px-6 py-4 font-semibold text-gray-700">
                                         Total Bobot
                                     </td>
                                     <td colSpan="2" className="px-6 py-4 font-semibold text-gray-900">
@@ -160,12 +162,28 @@ export default function Kriteria() {
                                     name="kategori"
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
                                     value={selectedItem.kategori}
-                                        onChange={(e) =>
-                                            setSelectedItem({ ...selectedItem, kategori: e.target.value })
-                                        }
+                                    onChange={(e) =>
+                                        setSelectedItem({ ...selectedItem, kategori: e.target.value })
+                                    }
                                 >
                                     <option value="Benefit">Benefit</option>
                                     <option value="Cost">Cost</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1">
+                                    Jenis
+                                </label>
+                                <select
+                                    name="jenis"
+                                    className="w-full px-3 py-2 border rounded-md focus:outline-none"
+                                    value={selectedItem.tipe}
+                                    onChange={(e) =>
+                                        setSelectedItem({ ...selectedItem, tipe: e.target.value })
+                                    }
+                                >
+                                    <option value="Kualitatif">Kualitatif</option>
+                                    <option value="Kuantitatif">Kuantitatif</option>
                                 </select>
                             </div>
                             <div>

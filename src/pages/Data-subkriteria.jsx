@@ -1,47 +1,24 @@
 import Infouser from "../components/info-user";
 import { useState,useEffect } from "react";
-import { kriteria } from "../utility/data";
+import { kriteria, subkriteria } from "../utility/data";
 
-const items = kriteria
+const itemsSubKriteria = subkriteria
+const itemsKriteria = kriteria
 
 export default function SubKriteria() {
 
+    // modal tambah dan ubah
     const [isOpen, setIsOpen] = useState(false);
-    const toggleForm = (item) => {
-        setSelectedItem(item);
+    const toggleForm = (skriteria) => {
+        setSelectedItem(skriteria);
         setIsOpen(true);
     };
     const closeModal = () => {
         setIsOpen(false);
         setSelectedItem(null);
     };
-
-    const [value, setValue] = useState("");
-    const [isMax, setIsMax] = useState(false);
-    const handleInputWeight = (e) => {
-        const inputValue = e.target.value;
-        if (inputValue > 1) return; 
-        setValue(inputValue);
-        setSelectedItem({ ...selectedItem, bobot: value });
-
-        if (inputValue === "1") {
-            setIsMax(true);
-        } else {
-            setIsMax(false);
-        }
-    };
     const [selectedItem, setSelectedItem] = useState(null);
 
-    const [error, setError] = useState("")
-    const totalBobot = items.reduce((sum, item) => sum + parseFloat(item.bobot || 0), 0).toFixed(2);
-    useEffect(() => {
-        if (totalBobot > 1) {
-            setError("Total bobot tidak boleh lebih dari 1.");
-        } else {
-            setError("");
-        }
-    }, [totalBobot]);
-   
     return (
         <>
             <div className="p-4 sm:ml-64">
@@ -60,74 +37,90 @@ export default function SubKriteria() {
                         </div>
                     </div>
 
-                    <div className="flex justify-end m-2">
-                        <button className="bg-gray-800 text-white text-sm p-2 rounded hover:bg-gray-700 transition" onClick={toggleForm}>Tambah Kirteria</button>
-                    </div>
+                    {/* area tabel */}
+                    {itemsKriteria
+                    .filter((kriteria) => kriteria.tipe !== "Kuantitatif")
+                    .map((kriteria) => {
+                        const subkriteria = itemsSubKriteria.filter(
+                            (skriteria) => skriteria.kriteria_id === kriteria.id
+                        );
 
-                    <div className="relative overflow-x-auto sm:rounded-lg">
-                        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                                <tr>
-                                    <th scope="col" className="px-6 py-3">Kode</th>
-                                    <th scope="col" className="px-6 py-3">Kriteria</th>
-                                    <th scope="col" className="px-6 py-3">Kategori</th>
-                                    <th scope="col" className="px-6 py-3">Bobot</th>
-                                    <th scope="col" className="px-6 py-3">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {items.map((item) => (
-                                    <tr key={item.id} className="odd:bg-white even:bg-gray-50 border-b">
-                                        <td className="px-6 py-4">{item.id}</td>
-                                        <td className="px-6 py-4">{item.kriteria}</td>
-                                        <td className="px-6 py-4">{item.kategori}</td>
-                                        <td className="px-6 py-4">{item.bobot}</td>
-                                        <td className="px-6 py-4 space-x-2">
-                                            <button
-                                                onClick={() => toggleForm(item)}
-                                                className="font-medium text-blue-600 hover:underline"
-                                            >
-                                                Ubah
-                                            </button>
-                                            <button
-                                                onClick={() => handleDeleteClick(item)}
-                                                className="font-medium text-red-600 hover:underline"
-                                            >
-                                                Hapus
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                            <tfoot>
-                                <tr className="bg-gray-100 border-t">
-                                    <td colSpan="3" className="px-6 py-4 font-semibold text-gray-700">
-                                        Total Bobot
-                                    </td>
-                                    <td colSpan="2" className="px-6 py-4 font-semibold text-gray-900">
-                                        {totalBobot}
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        {error && <p className="text-red-600 mt-2">{error}</p>}
-                        <div className="flex justify-end m-2">
-                            <button
-                                className={`bg-gray-800 text-white text-sm p-2 rounded transition ${
-                                    totalBobot > 1 ? "bg-gray-400 cursor-not-allowed" : "hover:bg-gray-700"
-                                }`}
-                                disabled={totalBobot > 1}
-                            >
-                                Simpan
-                            </button>
-                        </div>
+                        return (
+                            <div key={kriteria.id} className="border border-gray-300 shadow rounded-md mb-4">
+                                <div className="flex justify-between m-2">
+                                    <h1 className="text-gray-700 font-semibold">
+                                        {kriteria.kriteria} - {kriteria.id}
+                                    </h1>
+                                    <button
+                                        className="bg-gray-800 text-white text-sm p-2 rounded hover:bg-gray-700 transition"
+                                        onClick={() => toggleForm(kriteria)}
+                                    >
+                                        Tambah Subkriteria
+                                    </button>
+                                </div>
+
+                                <div className="relative overflow-x-auto sm:rounded-lg">
+                                    <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                            <tr>
+                                                <th scope="col" className="px-6 py-3">No</th>
+                                                <th scope="col" className="px-6 py-3">Sub Kriteria</th>
+                                                <th scope="col" className="px-6 py-3">Bobot</th>
+                                                <th scope="col" className="px-6 py-3">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {subkriteria.length > 0 ? (
+                                                subkriteria.map((skriteria, index) => (
+                                                    <tr key={skriteria.id} className="odd:bg-white even:bg-gray-50 border-b">
+                                                        <td className="px-6 py-4">{index + 1}</td>
+                                                        <td className="px-6 py-4">{skriteria.subkriteria}</td>
+                                                        <td className="px-6 py-4">{skriteria.bobot}</td>
+                                                        <td className="px-6 py-4 space-x-2">
+                                                            <button
+                                                                onClick={() => toggleForm(skriteria)}
+                                                                className="font-medium text-blue-600 hover:underline"
+                                                            >
+                                                                Ubah
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleDeleteSubkriteria(skriteria.id)}
+                                                                className="font-medium text-red-600 hover:underline"
+                                                            >
+                                                                Hapus
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="4" className="px-6 py-4 text-center text-gray-600">
+                                                        Tidak ada subkriteria untuk kriteria ini.
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        );
+                    })}
+
+                    <div className="flex justify-end m-2">
+                        <button
+                            className="bg-gray-800 text-white text-sm p-2 rounded transition hover:bg-gray-700"
+                        >
+                            Simpan
+                        </button>
                     </div>
+                    {/* area tabel */}
+
                 </div>
                 {isOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white rounded-lg w-full max-w-md mx-4 sm:mx-auto p-6 space-y-6 shadow-lg">
                         <div className="flex justify-between items-center">
-                            <h2 className="text-xl font-semibold text-gray-700">Buat Kriteria</h2>
+                            <h2 className="text-xl font-semibold text-gray-700">Buat Sub Kriteria</h2>
                             <button
                                 className="text-gray-500 hover:text-gray-700"
                                 onClick={closeModal}
@@ -139,34 +132,18 @@ export default function SubKriteria() {
                         <form className="space-y-4">
                             <div>
                                 <label className="block text-gray-700 font-medium mb-1">
-                                    Kriteria
+                                    Sub Kriteria
                                 </label>
                                 <input
                                     type="text"
-                                    name="kriteria"
+                                    name="subkriteria"
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
-                                    placeholder="Masukkan Kriteria"
-                                    value={selectedItem.kriteria}
+                                    placeholder="Masukkan Sub Kriteria"
+                                    value={selectedItem.subkriteria}
                                     onChange={(e) =>
-                                        setSelectedItem({ ...selectedItem, kriteria: e.target.value })
+                                        setSelectedItem({ ...selectedItem, subkriteria: e.target.value })
                                     }
                                 />
-                            </div>
-                            <div>
-                                <label className="block text-gray-700 font-medium mb-1">
-                                    Kategori
-                                </label>
-                                <select
-                                    name="kategori"
-                                    className="w-full px-3 py-2 border rounded-md focus:outline-none"
-                                    value={selectedItem.kategori}
-                                        onChange={(e) =>
-                                            setSelectedItem({ ...selectedItem, kategori: e.target.value })
-                                        }
-                                >
-                                    <option value="Benefit">Benefit</option>
-                                    <option value="Cost">Cost</option>
-                                </select>
                             </div>
                             <div>
                                 <label className="block text-gray-700 font-medium mb-1">
@@ -174,20 +151,11 @@ export default function SubKriteria() {
                                 </label>
                                 <input
                                     type="number"
-                                    step="0.1"
-                                    min="0"
-                                    max="1"
                                     value={selectedItem.bobot}
-                                    onChange={handleInputWeight}
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
-                                    placeholder="Masukkan bobot (0.0 - 1.0)"
+                                    placeholder="Masukkan bobot"
                                 />
-                                {isMax && (
-                                    <p className="text-red-600 text-sm">Bobot maksimal 1.</p>
-                                )}
                             </div>
-                            
-
                             <div className="flex justify-end space-x-4">
                                 <button
                                     type="button"

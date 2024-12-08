@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
+import logocg from "/src/assets/Logo Atas.png"
 
 export default function Sidenav() {
   const navigate = useNavigate();
@@ -92,7 +93,7 @@ export default function Sidenav() {
           </button>
 
           <a onClick={() => navigate('/')} className="flex items-center ps-2.5 mb-5">
-            <img src="src/assets/Logo Atas.png" className="h-12" alt="Logo" />
+            <img src={logocg} className="h-12" alt="Logo" />
           </a>
 
           <ul className="space-y-2 font-medium">

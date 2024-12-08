@@ -1,3 +1,5 @@
+import logouser from '/src/assets/react.svg'
+
 export default function Infouser(){
     return(
         <>
@@ -10,7 +12,7 @@ export default function Infouser(){
                 </div>
                 <div>
                     <button onClick={()=>navigate('/profile')}>
-                        <img src="src/assets/react.svg" alt="prf" />
+                        <img src={logouser} alt="prf" />
                     </button>
                 </div>
             </div>

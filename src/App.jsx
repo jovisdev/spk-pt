@@ -8,6 +8,7 @@ import Kriteria from "./pages/Data-kriteria"
 import Alternatif from "./pages/Data-alternatif"
 import Penilaian from "./pages/Data-penilaian"
 import SubKriteria from "./pages/Data-subkriteria"
+import PenilaianAlternatif from "./pages/Penilaian"
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/subkriteria" element={<SubKriteria/>}/>
         <Route path="/alternatif" element={<Alternatif/>}/>
         <Route path="/penilaian" element={<Penilaian/>}/>
+        <Route path="/penilaian/alternatif/:id" element={<PenilaianAlternatif/>}/>
       </Routes>
     </Router>
     </>

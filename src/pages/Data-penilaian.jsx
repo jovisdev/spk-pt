@@ -1,13 +1,14 @@
 import Infouser from "../components/info-user";
 import { useState, useEffect } from "react";
 import { alternatif, kriteria } from "../utility/data";
+import { useNavigate } from "react-router-dom";
 
 const itemsP = alternatif
 const itemsK = kriteria
 
 export default function Penilaian(){
 
-    
+    const navigate = useNavigate()
 
     return(
       <>
@@ -31,37 +32,28 @@ export default function Penilaian(){
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th scope="col" className="px-6 py-3 border border-r ">Id</th>
-                            <th scope="col" className="px-6 py-3 border border-r ">Nama</th>
-                            {itemsK.map((item, index) => (
-                                <th key={index} scope="col" className="px-6 py-3 border border-r">
-                                    {item.kriteria}
-                                </th>
-                            ))}
+                            <th scope="col" className="px-6 py-3">Id</th>
+                            <th scope="col" className="px-6 py-3">Nama</th>
+                            <th scope="col" className="px-6 py-3">Penilaian</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {itemsP.map((item, rowIndex) => (
-                            <tr key={item.id} className="odd:bg-white even:bg-gray-50 border-b">
-                                <td className="px-6 py-4 border border-gray-300">{item.id}</td>
-                                <td className="px-6 py-4 border border-gray-300">{item.nama}</td>
-                                {/* Kolom input untuk setiap nilai alternatif (x) dan kriteria (y) */}
-                                {itemsK.map((kriteria, colIndex) => (
-                                    <td key={`${rowIndex}-${colIndex}`} className="px-6 py-4 border border-gray-300">
-                                        <input
-                                            type="number"
-                                            className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            placeholder={`Nilai ${item.nama} - ${kriteria}`}
-                                            value={item[kriteria] || ""}
-                                            // onChange={(e) => handleInputChange(rowIndex, kriteria, e.target.value)}
-                                        />
-                                    </td>
-                                ))}
+                        {itemsP.map((p) => (
+                            <tr key={p.id} className="odd:bg-white even:bg-gray-50">
+                                <td className="px-6 py-4 w-1">{p.id}</td>
+                                <td className="px-6 py-4">{p.nama}</td>
+                                <td className="px-6 py-4 space-x-2 w-1/4">
+                                    <button
+                                        onClick={() => navigate(`/penilaian/alternatif/${p.id}`, {state: {nama: p.nama}})}
+                                        className="font-medium text-blue-600 hover:underline"
+                                    >
+                                        Nilai Pelamar
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-
             </div>
         </div>
       </>
