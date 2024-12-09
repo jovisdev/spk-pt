@@ -41,7 +41,9 @@ export default function Kriteria() {
             setError("");
         }
     }, [totalBobot]);
-   
+
+    const generateNewCode = () => `C${items.length + 1}`;
+    
     return (
         <>
             <div className="p-4 sm:ml-64">
@@ -139,6 +141,18 @@ export default function Kriteria() {
                         </div>
 
                         <form className="space-y-4">
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1">
+                                    Kode
+                                </label>
+                                <input
+                                    type="text"
+                                    name="newKode"
+                                    className="w-full px-3 py-2 border rounded-md focus:outline-none"
+                                    value={generateNewCode()} // Menggunakan kode baru
+                                    disabled // Membuat input tidak dapat diedit
+                                />
+                            </div>
                             <div>
                                 <label className="block text-gray-700 font-medium mb-1">
                                     Kriteria
