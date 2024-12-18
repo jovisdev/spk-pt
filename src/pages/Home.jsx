@@ -1,4 +1,6 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import logo from "../assets/Logo Atas.png";
+import image from "../assets/g4.png";
 
 export default function Home(){
     const navigate = useNavigate();
@@ -28,12 +30,12 @@ export default function Home(){
                     <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0">
                         <img
                             className="h-11 animate-ping absolute"
-                            src="src/assets/Logo Atas.png"
+                            src={logo}
                             alt="Your Company"
                         />
                         <img
                             className="h-11 relative"
-                            src="src/assets/Logo Atas.png"
+                            src={logo}
                             alt="Your Company"
                         />
                         <div className="mt-24 sm:mt-32 lg:mt-16">
@@ -62,7 +64,7 @@ export default function Home(){
                         <div className="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
                             <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
                             <img
-                                src="src/assets/g4.png"
+                                src={image}
                                 alt="App screenshot"
                                 width={2432}
                                 height={1442}

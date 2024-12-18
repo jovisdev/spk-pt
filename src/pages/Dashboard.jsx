@@ -1,6 +1,39 @@
 import Infouser from "../components/info-user";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 export default function Dashboard(){
+
+    const [kriteria, setKriteria] = useState("");
+    const [subkriteria, setSubKriteria] = useState("");
+    const [alternatif, setAlternatif] = useState("");
+    const [penilaian, setPenilaian] = useState("");
+
+    useEffect(() => {
+        // Fungsi async untuk memanggil API
+        const fetchData = async () => {
+            try {
+                const [kriteriaRes, subkriteriaRes, alternatifRes, penilaianRes] = await Promise.all([
+                    axios.get(import.meta.env.VITE_API_KRITERIA),
+                    axios.get(import.meta.env.VITE_API_SUBKRITERIA),
+                    axios.get(import.meta.env.VITE_API_ALTERNATIF),
+                    axios.get(import.meta.env.VITE_API_PENILAIAN),
+                ]);
+
+                // Update state dengan jumlah data
+                setKriteria(kriteriaRes.data.length);
+                setSubKriteria(subkriteriaRes.data.length);
+                setAlternatif(alternatifRes.data.length);
+                setPenilaian(penilaianRes.data.length);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        // Panggil fungsi fetchData
+        fetchData();
+    }, []); // Hanya dijalankan sekali saat komponen dimuat
+
     return(
       <>
         <div class="p-4 sm:ml-64">
@@ -26,9 +59,9 @@ export default function Dashboard(){
                     <div class="absolute inset-0 bg-gradient-to-r from-black/100 to-black/30 rounded"></div>
                         <div class="relative z-10">
                         <p class="text-lg text-gray-200">
-                            Kriteria Trainer
+                            Kriteria
                         </p>
-                        <h1 class="text-4xl font-bold text-white">12</h1>
+                        <h1 class="text-4xl font-bold text-white">{kriteria}</h1>
                     </div>
                 </div>
 
@@ -37,9 +70,9 @@ export default function Dashboard(){
                     <div class="absolute inset-0 bg-gradient-to-r from-black/100 to-black/30 rounded"></div>
                         <div class="relative z-10">
                         <p class="text-lg text-gray-200">
-                            Trainer Yang Melamar
+                            Sub Kriteria
                         </p>
-                        <h1 class="text-4xl font-bold text-white">12</h1>
+                        <h1 class="text-4xl font-bold text-white">{subkriteria}</h1>
                     </div>
                 </div>
 
@@ -47,9 +80,9 @@ export default function Dashboard(){
                     <div class="absolute inset-0 bg-gradient-to-r from-black/100 to-black/30 rounded"></div>
                         <div class="relative z-10">
                         <p class="text-lg text-gray-200">
-                            Jumlah Trainer Aktif
+                            Alternatif
                         </p>
-                        <h1 class="text-4xl font-bold text-white">12</h1>
+                        <h1 class="text-4xl font-bold text-white">{alternatif}</h1>
                     </div>
                 </div>
 
@@ -57,9 +90,9 @@ export default function Dashboard(){
                     <div class="absolute inset-0 bg-gradient-to-r from-black/100 to-black/30 rounded"></div>
                         <div class="relative z-10">
                         <p class="text-lg text-gray-200">
-                            Data Seleksi
+                            Penilaian
                         </p>
-                        <h1 class="text-4xl font-bold text-white">12</h1>
+                        <h1 class="text-4xl font-bold text-white">{penilaian}</h1>
                     </div>
                 </div>
 

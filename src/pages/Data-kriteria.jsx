@@ -1,39 +1,33 @@
 import Infouser from "../components/info-user";
 import { useState,useEffect } from "react";
-import { kriteria } from "../utility/data";
-
-const items = kriteria
+import axios from "axios";
 
 export default function Kriteria() {
-
-    const [isOpen, setIsOpen] = useState(false);
-    const toggleForm = (item) => {
-        setSelectedItem(item);
-        setIsOpen(true);
-    };
-    const closeModal = () => {
-        setIsOpen(false);
-        setSelectedItem(null);
-    };
-
-    const [value, setValue] = useState("");
-    const [isMax, setIsMax] = useState(false);
-    const handleInputWeight = (e) => {
-        const inputValue = e.target.value;
-        if (inputValue > 1) return; 
-        setValue(inputValue);
-        setSelectedItem({ ...selectedItem, bobot: value });
-
-        if (inputValue === "1") {
-            setIsMax(true);
-        } else {
-            setIsMax(false);
-        }
-    };
+    // State untuk data kriteria
+    const [kriteria, setKriteria] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
+    const [value, setValue] = useState("");
+    const [error, setError] = useState("");
+    const [isOpen, setIsOpen] = useState(false);
 
-    const [error, setError] = useState("")
-    const totalBobot = items.reduce((sum, item) => sum + parseFloat(item.bobot || 0), 0).toFixed(2);
+    // Ambil data dari API
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(import.meta.env.VITE_API_KRITERIA);
+                setKriteria(response.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    // Hitung total bobot
+    const totalBobot = kriteria.reduce((sum, item) => sum + parseFloat(item.bobot || 0), 0).toFixed(2);
+
+    // Validasi jika total bobot lebih dari 1
     useEffect(() => {
         if (totalBobot > 1) {
             setError("Total bobot tidak boleh lebih dari 1.");
@@ -42,7 +36,49 @@ export default function Kriteria() {
         }
     }, [totalBobot]);
 
-    const generateNewCode = () => `C${items.length + 1}`;
+    // Toggle form/modal
+    const toggleForm = (item) => {
+        setSelectedItem(item);
+        setValue(item.bobot || ""); // Isi nilai input dengan bobot yang ada
+        setIsOpen(true);
+    };
+    const closeModal = () => {
+        setIsOpen(false);
+        setSelectedItem(null);
+        setValue("");
+    };
+
+    // Input handler untuk bobot
+    const handleInputWeight = (e) => {
+        const inputValue = e.target.value;
+
+        // Validasi agar nilai input <= 1
+        if (parseFloat(inputValue) + totalBobot - parseFloat(selectedItem?.bobot || 0) > 1) {
+            setError("Total bobot tidak boleh lebih dari 1.");
+            return;
+        } else {
+            setError("");
+        }
+
+        setValue(inputValue);
+        setSelectedItem({ ...selectedItem, bobot: inputValue });
+    };
+
+    // Simpan perubahan bobot
+    const saveChanges = () => {
+        const updatedKriteria = kriteria.map((item) =>
+            item.id === selectedItem.id ? { ...selectedItem, bobot: parseFloat(value) } : item
+        );
+        setKriteria(updatedKriteria);
+        closeModal();
+    };
+
+    // Generate kode baru
+    const generateNewCode = () => {
+        const lastCode = kriteria[kriteria.length - 1]?.kode || "C0";
+        const newNumber = parseInt(lastCode.replace("C", ""), 10) + 1;
+        return `C${newNumber}`;
+    };
     
     return (
         <>
@@ -72,18 +108,18 @@ export default function Kriteria() {
                                 <tr>
                                     <th scope="col" className="px-6 py-3 w-1">Kode</th>
                                     <th scope="col" className="px-6 py-3">Kriteria</th>
-                                    <th scope="col" className="px-6 py-3">Kategori</th>
+                                    <th scope="col" className="px-6 py-3">Jenis</th>
                                     <th scope="col" className="px-6 py-3">Tipe</th>
                                     <th scope="col" className="px-6 py-3">Bobot</th>
                                     <th scope="col" className="px-6 py-3">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {items.map((item) => (
+                                {kriteria.map((item) => (
                                     <tr key={item.id} className="odd:bg-white even:bg-gray-50 border-b">
-                                        <td className="px-6 py-4 w-1">{item.id}</td>
+                                        <td className="px-6 py-4 w-1">{item.kode}</td>
                                         <td className="px-6 py-4">{item.kriteria}</td>
-                                        <td className="px-6 py-4">{item.kategori}</td>
+                                        <td className="px-6 py-4">{item.jenis}</td>
                                         <td className="px-6 py-4">{item.tipe}</td>
                                         <td className="px-6 py-4">{item.bobot}</td>
                                         <td className="px-6 py-4 space-x-2">
@@ -214,7 +250,7 @@ export default function Kriteria() {
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
                                     placeholder="Masukkan bobot (0.0 - 1.0)"
                                 />
-                                {isMax && (
+                                {error && (
                                     <p className="text-red-600 text-sm">Bobot maksimal 1.</p>
                                 )}
                             </div>

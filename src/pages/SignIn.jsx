@@ -1,7 +1,56 @@
 import { Link, useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux";
+import { login } from "../utility/authSlice";
+import { useState } from "react";
+import axios from "axios";
+
+import logo from "../assets/Logo Atas.png";
 
 export default function Signin(){
-    const navigate = useNavigate()
+
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        
+        // Contoh request ke server API (misalnya, menggunakan fetch atau axios)
+        try {
+            const response = await axios.post(import.meta.env.VITE_API_AUTH, {
+              username,
+              password,
+            });
+          
+            // Jika login berhasil
+            if (response.status === 200) {
+              // Simpan token dan informasi lain di localStorage (atau sessionStorage)
+              localStorage.setItem("jabatan", response.data.jabatan)
+              localStorage.setItem("nama", response.data.name)
+              localStorage.setItem("token", response.data.accessToken)
+
+          
+              // Dispatch ke Redux store (hanya data yang dibutuhkan)
+              dispatch(
+                login({
+                  nama: response.data.nama,
+                  jabatan: response.data.jabatan,
+                })
+              );
+          
+              navigate('/dashboard')
+            }
+          } catch (e) {
+            if (e.response && (e.response.status === 400 || e.response.status === 404)) {
+              // Jika username atau password salah, tampilkan alert
+              window.alert("Username atau password salah.");
+            } else {
+              // Tangani error lain
+              console.log("Terjadi kesalahan", e);
+            }
+          }
+    }
     return(
         <>
             <div className="rounded-sm border border-stroke shadow-default h-screen">
@@ -9,11 +58,11 @@ export default function Signin(){
             <div className="hidden w-full xl:block xl:w-1/2">
                 <div className="py-17.5 px-26 text-center">
                 <Link className="mb-5.5 flex justify-center" to="/">
-                    <img className="w-1/2" src="src/assets/Logo Atas.png" alt="Logo" />
+                    <img className="w-1/2" src={logo} alt="Logo" />
                 </Link>
 
                 <h2 className="mb-9 text-2xl font-bold text-gray-800 sm:text-title-xl2">
-                        Sign In to CastleGym Management.
+                        Sistem Informasi Manajemen Castle Gym.
                 </h2>
                 </div>
             </div>
@@ -29,8 +78,10 @@ export default function Signin(){
                         </label>
                         <div className="relative">
                             <input
-                            type="email"
-                            placeholder="Enter your email"
+                            onChange={(e)=> setUsername(e.target.value)}
+                            type="text"
+                            name="username"
+                            placeholder="Masukan Username"
                             className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none"
                             />
 
@@ -60,6 +111,9 @@ export default function Signin(){
                         </label>
                         <div className="relative">
                             <input
+                            onChange={(e)=> setPassword(e.target.value)}
+                            id="password"
+                            name="password"
                             type="password"
                             placeholder="6+ Characters, 1 Capital letter"
                             className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none"
@@ -91,9 +145,9 @@ export default function Signin(){
 
                         <div className="mb-5">
                         <button
-                            onClick={()=>navigate('/dashboard')}
+                            onClick={handleLogin} type="button"
                             className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90 bg-black"
-                        >SignIn</button>
+                        >Masuk</button>
                         </div>
                     </form>
                     </div>
