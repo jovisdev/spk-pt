@@ -1,18 +1,22 @@
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+// import { useSelector } from 'react-redux';
 
-const PrivateRoute = ({ children, allowedRoles }) => {
-    const { isAuthenticated, statusJabatan } = useSelector((state) => state.auth);
+const PrivateRoute = ({ children, requiredRole }) => {
+  const role = localStorage.getItem('jabatan'); // Ambil role dari localStorage
 
-    if (!isAuthenticated) {
-        return <Navigate to="/signin" replace />;
-    }
+  if (!role) {
+    // Jika role tidak ditemukan, redirect ke halaman login
+    return <Navigate to="/unauthorized" />;
+  }
 
-    if (!allowedRoles.includes(statusJabatan)) {
-        return <Navigate to="/unauthorized" replace />;
-    }
+  if (requiredRole && role !== requiredRole) {
+    // Jika role tidak sesuai dengan yang dibutuhkan, redirect ke halaman login
+    return <Navigate to="/unauthorized" />;
+  }
 
-    return children;
+  // Jika role sesuai, tampilkan halaman yang diminta
+  return children;
 };
 
 export default PrivateRoute;

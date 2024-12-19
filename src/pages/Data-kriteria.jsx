@@ -1,6 +1,7 @@
 import Infouser from "../components/info-user";
 import { useState,useEffect } from "react";
 import axios from "axios";
+import axiosRetry from "axios-retry";
 
 export default function Kriteria() {
     // State untuk data kriteria
@@ -8,9 +9,13 @@ export default function Kriteria() {
     const [selectedItem, setSelectedItem] = useState(null);
     const [value, setValue] = useState("");
     const [error, setError] = useState("");
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpenUbah, setIsOpenUbah] = useState(false);
+    const [isOpenTambah, setIsOpenTambah] = useState(false);
 
-    // Ambil data dari API
+
+    // API
+    // GET DATA
+    axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -36,14 +41,18 @@ export default function Kriteria() {
         }
     }, [totalBobot]);
 
-    // Toggle form/modal
-    const toggleForm = (item) => {
+    // Toggle form/modal ubah
+    const toggleFormUbah = (item) => {
         setSelectedItem(item);
         setValue(item.bobot || ""); // Isi nilai input dengan bobot yang ada
-        setIsOpen(true);
+        setIsOpenUbah(true);
     };
+    const toggleFormTambah = () => {
+        setIsOpenTambah(true)
+    }
     const closeModal = () => {
-        setIsOpen(false);
+        setIsOpenTambah(false);
+        setIsOpenUbah(false)
         setSelectedItem(null);
         setValue("");
     };
@@ -65,12 +74,31 @@ export default function Kriteria() {
     };
 
     // Simpan perubahan bobot
-    const saveChanges = () => {
+    const ubah = () => {
         const updatedKriteria = kriteria.map((item) =>
             item.id === selectedItem.id ? { ...selectedItem, bobot: parseFloat(value) } : item
         );
         setKriteria(updatedKriteria);
-        closeModal();
+        closeModal()
+    };
+
+    const saveChanges = async () => {
+        try {
+            const savePromises = kriteria.map((item) =>
+                axios.put(`${import.meta.env.VITE_API_UPDATEKRITERIA}/${item.id}`, item)
+            );
+    
+            const responses = await Promise.all(savePromises);
+            const allSuccessful = responses.every((response) => response.status === 201);
+    
+            if (allSuccessful) {
+                window.alert('Semua perubahan berhasil disimpan ke server.');
+            } else {
+                window.alert('Beberapa perubahan gagal disimpan.');
+            }
+        } catch (error) {
+            window.alert('Terjadi kesalahan saat menyimpan semua perubahan: ', error);
+        }
     };
 
     // Generate kode baru
@@ -99,7 +127,7 @@ export default function Kriteria() {
                     </div>
 
                     <div className="flex justify-end m-2">
-                        <button className="bg-gray-800 text-white text-sm p-2 rounded hover:bg-gray-700 transition" onClick={toggleForm}>Tambah Kirteria</button>
+                        <button className="bg-gray-800 text-white text-sm p-2 rounded hover:bg-gray-700 transition" onClick={toggleFormTambah}>Tambah Kirteria</button>
                     </div>
 
                     <div className="relative overflow-x-auto sm:rounded-lg">
@@ -124,7 +152,7 @@ export default function Kriteria() {
                                         <td className="px-6 py-4">{item.bobot}</td>
                                         <td className="px-6 py-4 space-x-2">
                                             <button
-                                                onClick={() => toggleForm(item)}
+                                                onClick={() => toggleFormUbah(item)}
                                                 className="font-medium text-blue-600 hover:underline"
                                             >
                                                 Ubah
@@ -153,6 +181,8 @@ export default function Kriteria() {
                         {error && <p className="text-red-600 mt-2">{error}</p>}
                         <div className="flex justify-end m-2">
                             <button
+                                type="button"
+                                onClick={saveChanges}
                                 className={`bg-gray-800 text-white text-sm p-2 rounded transition ${
                                     totalBobot > 1 ? "bg-gray-400 cursor-not-allowed" : "hover:bg-gray-700"
                                 }`}
@@ -163,11 +193,11 @@ export default function Kriteria() {
                         </div>
                     </div>
                 </div>
-                {isOpen && (
+                {isOpenUbah && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white rounded-lg w-full max-w-md mx-4 sm:mx-auto p-6 space-y-6 shadow-lg">
                         <div className="flex justify-between items-center">
-                            <h2 className="text-xl font-semibold text-gray-700">Buat Kriteria</h2>
+                            <h2 className="text-xl font-semibold text-gray-700">Ubah Kriteria</h2>
                             <button
                                 className="text-gray-500 hover:text-gray-700"
                                 onClick={closeModal}
@@ -185,8 +215,8 @@ export default function Kriteria() {
                                     type="text"
                                     name="newKode"
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
-                                    value={generateNewCode()} // Menggunakan kode baru
-                                    disabled // Membuat input tidak dapat diedit
+                                    value={selectedItem.kode}
+                                    disabled
                                 />
                             </div>
                             <div>
@@ -206,14 +236,14 @@ export default function Kriteria() {
                             </div>
                             <div>
                                 <label className="block text-gray-700 font-medium mb-1">
-                                    Kategori
+                                    Jenis
                                 </label>
                                 <select
                                     name="kategori"
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
-                                    value={selectedItem.kategori}
+                                    value={selectedItem.jenis}
                                     onChange={(e) =>
-                                        setSelectedItem({ ...selectedItem, kategori: e.target.value })
+                                        setSelectedItem({ ...selectedItem, jenis: e.target.value })
                                     }
                                 >
                                     <option value="Benefit">Benefit</option>
@@ -222,7 +252,7 @@ export default function Kriteria() {
                             </div>
                             <div>
                                 <label className="block text-gray-700 font-medium mb-1">
-                                    Jenis
+                                    Tipe
                                 </label>
                                 <select
                                     name="jenis"
@@ -247,6 +277,106 @@ export default function Kriteria() {
                                     max="1"
                                     value={selectedItem.bobot}
                                     onChange={handleInputWeight}
+                                    className="w-full px-3 py-2 border rounded-md focus:outline-none"
+                                    placeholder="Masukkan bobot (0.0 - 1.0)"
+                                />
+                                {error && (
+                                    <p className="text-red-600 text-sm">Bobot maksimal 1.</p>
+                                )}
+                            </div>
+                            
+
+                            <div className="flex justify-end space-x-4">
+                                <button
+                                    type="button"
+                                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                                    onClick={closeModal}
+                                >
+                                    Batal
+                                </button>
+                                <button
+                                type="button"
+                                    onClick={ubah}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                                >
+                                    Ubah
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                )}
+
+                {isOpenTambah && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white rounded-lg w-full max-w-md mx-4 sm:mx-auto p-6 space-y-6 shadow-lg">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-xl font-semibold text-gray-700">Tambah Kriteria</h2>
+                            <button
+                                className="text-gray-500 hover:text-gray-700"
+                                onClick={closeModal}
+                            >
+                                &times;
+                            </button>
+                        </div>
+
+                        <form className="space-y-4">
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1">
+                                    Kode
+                                </label>
+                                <input
+                                    type="text"
+                                    name="newKode"
+                                    className="w-full px-3 py-2 border rounded-md focus:outline-none"
+                                    value={generateNewCode()}
+                                    disabled
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1">
+                                    Kriteria
+                                </label>
+                                <input
+                                    type="text"
+                                    name="kriteria"
+                                    className="w-full px-3 py-2 border rounded-md focus:outline-none"
+                                    placeholder="Masukkan Kriteria"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1">
+                                    Kategori
+                                </label>
+                                <select
+                                    name="kategori"
+                                    className="w-full px-3 py-2 border rounded-md focus:outline-none"
+                                >
+                                    <option value="Benefit">Benefit</option>
+                                    <option value="Cost">Cost</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1">
+                                    Jenis
+                                </label>
+                                <select
+                                    name="jenis"
+                                    className="w-full px-3 py-2 border rounded-md focus:outline-none"
+                                >
+                                    <option value="Kualitatif">Kualitatif</option>
+                                    <option value="Kuantitatif">Kuantitatif</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1">
+                                    Bobot
+                                </label>
+                                <input
+                                    type="number"
+                                    step="0.1"
+                                    min="0"
+                                    max="1"
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
                                     placeholder="Masukkan bobot (0.0 - 1.0)"
                                 />
