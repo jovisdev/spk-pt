@@ -107,6 +107,62 @@ export default function Kriteria() {
         const newNumber = parseInt(lastCode.replace("C", ""), 10) + 1;
         return `C${newNumber}`;
     };
+
+    // hapus kriteria
+    const handleDelete = async (item) => {
+        try {
+            // Kirim permintaan DELETE untuk item yang dipilih
+            const response = await axios.delete(`${import.meta.env.VITE_API_DELETEKRITERIA}/${item.id}`);
+    
+            // Periksa status dari respons
+            if (response.status === 200) {
+                window.alert(response.data.message);
+    
+                // Hapus item yang dipilih dari state kriteria
+                const updatedKriteria = kriteria.filter(k => k.id !== item.id);
+                setKriteria(updatedKriteria);
+            }
+        } catch (error) {
+            console.log('Terjadi kesalahan saat menghapus data.', error);
+        }
+    };
+
+    // tambah kriteria
+    const [kode, setKode] = useState('');
+    const [kriteriain, setKriteriain] = useState('');
+    const [jenis, setJenis] = useState('');
+    const [bobot, setBobot] = useState('');
+    const [tipe, setTipe] = useState('');
+
+    const handleAdd = async (e) => {
+        e.preventDefault();
+        const data = {
+            kode,
+            kriteriain,
+            jenis,
+            bobot: parseFloat(bobot),
+            tipe,
+        };
+
+        console.log(data)
+    
+        try {
+            const response = await axios.post(import.meta.env.VITE_API_ADDKRITERIA, data);
+            const updatedKriteria = kriteria.map((item) =>
+                item.id === selectedItem.id ? { ...selectedItem, bobot: parseFloat(value) } : item
+            );
+            setKriteria(updatedKriteria);
+            setKriteria('');
+            setJenis('');
+            setBobot('');
+            setTipe('');
+            window.alert('Kriteria berhasil ditambahkan:', response.data);
+            closeModal()
+        } catch (error) {
+            console.error('Terjadi kesalahan:', error);
+        }
+    };
+    
     
     return (
         <>
@@ -137,8 +193,8 @@ export default function Kriteria() {
                                     <th scope="col" className="px-6 py-3 w-1">Kode</th>
                                     <th scope="col" className="px-6 py-3">Kriteria</th>
                                     <th scope="col" className="px-6 py-3">Jenis</th>
-                                    <th scope="col" className="px-6 py-3">Tipe</th>
                                     <th scope="col" className="px-6 py-3">Bobot</th>
+                                    <th scope="col" className="px-6 py-3">Tipe</th>
                                     <th scope="col" className="px-6 py-3">Aksi</th>
                                 </tr>
                             </thead>
@@ -148,17 +204,19 @@ export default function Kriteria() {
                                         <td className="px-6 py-4 w-1">{item.kode}</td>
                                         <td className="px-6 py-4">{item.kriteria}</td>
                                         <td className="px-6 py-4">{item.jenis}</td>
-                                        <td className="px-6 py-4">{item.tipe}</td>
                                         <td className="px-6 py-4">{item.bobot}</td>
+                                        <td className="px-6 py-4">{item.tipe}</td>
                                         <td className="px-6 py-4 space-x-2">
                                             <button
+                                                type="button"
                                                 onClick={() => toggleFormUbah(item)}
                                                 className="font-medium text-blue-600 hover:underline"
                                             >
                                                 Ubah
                                             </button>
                                             <button
-                                                onClick={() => handleDeleteClick(item)}
+                                                type="button"
+                                                onClick={() => handleDelete(item)}
                                                 className="font-medium text-red-600 hover:underline"
                                             >
                                                 Hapus
@@ -285,7 +343,6 @@ export default function Kriteria() {
                                 )}
                             </div>
                             
-
                             <div className="flex justify-end space-x-4">
                                 <button
                                     type="button"
@@ -326,11 +383,12 @@ export default function Kriteria() {
                                     Kode
                                 </label>
                                 <input
+                                    value={kode}
                                     type="text"
-                                    name="newKode"
+                                    name="kode"
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
-                                    value={generateNewCode()}
-                                    disabled
+                                    onChange={(e) => setKode(e.target.value)}
+                                    required
                                 />
                             </div>
                             <div>
@@ -338,34 +396,29 @@ export default function Kriteria() {
                                     Kriteria
                                 </label>
                                 <input
+                                    value={kriteriain}
                                     type="text"
                                     name="kriteria"
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
                                     placeholder="Masukkan Kriteria"
+                                    onChange={(e) => setKriteriain(e.target.value)}
+                                    required
                                 />
-                            </div>
-                            <div>
-                                <label className="block text-gray-700 font-medium mb-1">
-                                    Kategori
-                                </label>
-                                <select
-                                    name="kategori"
-                                    className="w-full px-3 py-2 border rounded-md focus:outline-none"
-                                >
-                                    <option value="Benefit">Benefit</option>
-                                    <option value="Cost">Cost</option>
-                                </select>
                             </div>
                             <div>
                                 <label className="block text-gray-700 font-medium mb-1">
                                     Jenis
                                 </label>
                                 <select
+                                id="jenis"
+                                    onChange={(e) => setJenis(e.target.value)}
                                     name="jenis"
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
+                                    required
                                 >
-                                    <option value="Kualitatif">Kualitatif</option>
-                                    <option value="Kuantitatif">Kuantitatif</option>
+                                    <option disabled selected value> -- select an option -- </option>
+                                    <option value="Benefit">Benefit</option>
+                                    <option value="Cost">Cost</option>
                                 </select>
                             </div>
                             <div>
@@ -373,16 +426,35 @@ export default function Kriteria() {
                                     Bobot
                                 </label>
                                 <input
+                                    value={bobot}
+                                    onChange={(e) => setBobot(e.target.value)}
                                     type="number"
                                     step="0.1"
                                     min="0"
                                     max="1"
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
                                     placeholder="Masukkan bobot (0.0 - 1.0)"
+                                    required
                                 />
                                 {error && (
                                     <p className="text-red-600 text-sm">Bobot maksimal 1.</p>
                                 )}
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1">
+                                    Tipe
+                                </label>
+                                <select
+                                id="tipe"
+                                    onChange={(e) => setTipe(e.target.value)}
+                                    name="tipe"
+                                    className="w-full px-3 py-2 border rounded-md focus:outline-none"
+                                    required
+                                >
+                                    <option disabled selected value> -- select an option -- </option>
+                                    <option value="Kualitatif">Kualitatif</option>
+                                    <option value="Kuantitatif">Kuantitatif</option>
+                                </select>
                             </div>
                             
 
@@ -395,7 +467,8 @@ export default function Kriteria() {
                                     Batal
                                 </button>
                                 <button
-                                    type="submit"
+                                    onClick={handleAdd}
+                                    type="button"
                                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                                 >
                                     Tambah
