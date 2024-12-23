@@ -200,7 +200,7 @@ export default function Sidenav() {
             <li>
               <button
                 className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
-                  isActive('/penilaian') ? 'bg-gray-200 text-gray-900' : 'text-gray-900'
+                  isActive('/perhitungan') ? 'bg-gray-200 text-gray-900' : 'text-gray-900'
                 }`}
                 onClick={() => navigate('/perhitungan')}
               >

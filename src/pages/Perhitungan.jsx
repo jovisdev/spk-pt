@@ -6,8 +6,6 @@ const itemsK = kriteria
 
 export default function Perhitungan(){
 
-    
-
     return(
       <>
         <div class="p-4 sm:ml-64">

@@ -1,11 +1,41 @@
 import { useParams, useLocation } from "react-router-dom";
 import Infouser from "../components/info-user";
-import { kriteria, subkriteria } from "../utility/data";
-
-const itemsK = kriteria;
-const itemsSubKriteria = subkriteria;
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function PenilaianAlternatif() {
+
+    const [kriteria, setKriteria] = useState([]);
+    const [subKriteria, setSubKriteria] = useState([]);
+
+    // API
+    // GET DATA
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(import.meta.env.VITE_API_KRITERIA);
+                setKriteria(response.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    // GET DATA
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(import.meta.env.VITE_API_SUBKRITERIA);
+                setSubKriteria(response.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const { id } = useParams();
     const location = useLocation();
@@ -34,7 +64,7 @@ export default function PenilaianAlternatif() {
                         <p className="text-gray-500">ID Pelamar: {id}</p>
                     </div>
                     <form className="space-y-2">
-                        {itemsK.map((k) => (
+                        {kriteria.map((k) => (
                             <div key={k.id}>
                                 <label className="block text-gray-700 font-medium mb-1">
                                     {k.kriteria} (ID Kriteria: {k.id})
@@ -51,7 +81,7 @@ export default function PenilaianAlternatif() {
                                 <option value="" disabled>
                                     Pilih nilai untuk {k.kriteria}
                                 </option>
-                                {itemsSubKriteria
+                                {subKriteria
                                 .filter((sk) => sk.kriteria_id === k.id)
                                 .map((sk) => (
                                     <option>

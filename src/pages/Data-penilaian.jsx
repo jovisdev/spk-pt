@@ -1,14 +1,28 @@
 import Infouser from "../components/info-user";
 import { useState, useEffect } from "react";
-import { alternatif, kriteria } from "../utility/data";
 import { useNavigate } from "react-router-dom";
-
-const itemsP = alternatif
-const itemsK = kriteria
+import axios from "axios";
 
 export default function Penilaian(){
 
     const navigate = useNavigate()
+
+    const [alternatif,setAlternatif] = useState([])
+
+    // API
+    // GET DATA
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(import.meta.env.VITE_API_ALTERNATIF);
+                setAlternatif(response.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     return(
       <>
@@ -32,19 +46,19 @@ export default function Penilaian(){
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th scope="col" className="px-6 py-3">Id</th>
+                            <th scope="col" className="px-6 py-3">Kode</th>
                             <th scope="col" className="px-6 py-3">Nama</th>
                             <th scope="col" className="px-6 py-3">Penilaian</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {itemsP.map((p) => (
-                            <tr key={p.id} className="odd:bg-white even:bg-gray-50">
-                                <td className="px-6 py-4 w-1">{p.id}</td>
-                                <td className="px-6 py-4">{p.nama}</td>
+                        {alternatif.map((alternatif) => (
+                            <tr key={alternatif.id} className="odd:bg-white even:bg-gray-50">
+                                <td className="px-6 py-4 w-1">{alternatif.kode}</td>
+                                <td className="px-6 py-4">{alternatif.nama}</td>
                                 <td className="px-6 py-4 space-x-2 w-1/4">
                                     <button
-                                        onClick={() => navigate(`/penilaian/alternatif/${p.id}`, {state: {nama: p.nama}})}
+                                        onClick={() => navigate(`/penilaian/alternatif/${alternatif.id}`, {state: {nama: alternatif.nama}})}
                                         className="font-medium text-blue-600 hover:underline"
                                     >
                                         Nilai Pelamar

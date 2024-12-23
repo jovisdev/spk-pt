@@ -42,13 +42,13 @@ function App() {
             }/>
 
             <Route path="/subkriteria" element={
-              <PrivateRoute requiredRole={["Super Admin"]}>
+              <PrivateRoute requiredRole="Super Admin">
                 <SubKriteria />
               </PrivateRoute>
             }/>
 
             <Route path="/alternatif" element={
-              <PrivateRoute allowedRoles={["Super Admin"]}>
+              <PrivateRoute requiredRole="Super Admin">
                 <Alternatif />
               </PrivateRoute>
             }/>

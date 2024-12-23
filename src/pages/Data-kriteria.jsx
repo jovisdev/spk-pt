@@ -1,9 +1,11 @@
 import Infouser from "../components/info-user";
 import { useState,useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import axiosRetry from "axios-retry";
 
 export default function Kriteria() {
+    const navigate = useNavigate()
+
     // State untuk data kriteria
     const [kriteria, setKriteria] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
@@ -15,7 +17,6 @@ export default function Kriteria() {
 
     // API
     // GET DATA
-    axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -73,40 +74,38 @@ export default function Kriteria() {
         setSelectedItem({ ...selectedItem, bobot: inputValue });
     };
 
-    // Simpan perubahan bobot
-    const ubah = () => {
-        const updatedKriteria = kriteria.map((item) =>
-            item.id === selectedItem.id ? { ...selectedItem, bobot: parseFloat(value) } : item
-        );
-        setKriteria(updatedKriteria);
-        closeModal()
-    };
-
-    const saveChanges = async () => {
+    const ubah = async () => {
         try {
-            const savePromises = kriteria.map((item) =>
-                axios.put(`${import.meta.env.VITE_API_UPDATEKRITERIA}/${item.id}`, item)
+            const updatedItem = { ...selectedItem, bobot: parseFloat(value) };
+    
+            const response = await axios.put(
+                `${import.meta.env.VITE_API_UPDATEKRITERIA}/${updatedItem.id}`,
+                updatedItem
             );
     
-            const responses = await Promise.all(savePromises);
-            const allSuccessful = responses.every((response) => response.status === 201);
-    
-            if (allSuccessful) {
-                window.alert('Semua perubahan berhasil disimpan ke server.');
+            if (response.status === 200 || response.status === 201) {
+                window.alert('Perubahan berhasil disimpan.');
+                const updatedKriteria = kriteria.map((item) =>
+                    item.id === updatedItem.id ? updatedItem : item
+                );
+                setKriteria(updatedKriteria);
+                closeModal(); // Menutup modal setelah sukses
             } else {
-                window.alert('Beberapa perubahan gagal disimpan.');
+                window.alert('Gagal menyimpan perubahan.');
             }
         } catch (error) {
-            window.alert('Terjadi kesalahan saat menyimpan semua perubahan: ', error);
+            console.error('Error saat menyimpan perubahan:', error);
+            window.alert('Terjadi kesalahan saat menyimpan perubahan.');
         }
     };
+    
 
-    // Generate kode baru
-    const generateNewCode = () => {
-        const lastCode = kriteria[kriteria.length - 1]?.kode || "C0";
-        const newNumber = parseInt(lastCode.replace("C", ""), 10) + 1;
-        return `C${newNumber}`;
-    };
+    // // Generate kode baru
+    // const generateNewCode = () => {
+    //     const lastCode = kriteria[kriteria.length - 1]?.kode || "C0";
+    //     const newNumber = parseInt(lastCode.replace("C", ""), 10) + 1;
+    //     return `C${newNumber}`;
+    // };
 
     // hapus kriteria
     const handleDelete = async (item) => {
@@ -143,21 +142,18 @@ export default function Kriteria() {
             bobot: parseFloat(bobot),
             tipe,
         };
-
-        console.log(data)
     
         try {
             const response = await axios.post(import.meta.env.VITE_API_ADDKRITERIA, data);
-            const updatedKriteria = kriteria.map((item) =>
-                item.id === selectedItem.id ? { ...selectedItem, bobot: parseFloat(value) } : item
-            );
-            setKriteria(updatedKriteria);
-            setKriteria('');
+            setKriteriain('');
             setJenis('');
             setBobot('');
             setTipe('');
-            window.alert('Kriteria berhasil ditambahkan:', response.data);
-            closeModal()
+            if (response.status === 200 || response.status === 201) {
+                window.alert('Kriteria berhasil ditambahkan.');
+                closeModal()
+            }
+            window.location.reload();
         } catch (error) {
             console.error('Terjadi kesalahan:', error);
         }
@@ -240,13 +236,13 @@ export default function Kriteria() {
                         <div className="flex justify-end m-2">
                             <button
                                 type="button"
-                                onClick={saveChanges}
+                                onClick={()=>navigate('/subkriteria')}
                                 className={`bg-gray-800 text-white text-sm p-2 rounded transition ${
                                     totalBobot > 1 ? "bg-gray-400 cursor-not-allowed" : "hover:bg-gray-700"
                                 }`}
                                 disabled={totalBobot > 1}
                             >
-                                Simpan
+                                Lanjut
                             </button>
                         </div>
                     </div>
@@ -304,6 +300,7 @@ export default function Kriteria() {
                                         setSelectedItem({ ...selectedItem, jenis: e.target.value })
                                     }
                                 >
+                                    <option disabled selected value> -- select an option -- </option>
                                     <option value="Benefit">Benefit</option>
                                     <option value="Cost">Cost</option>
                                 </select>
@@ -320,6 +317,7 @@ export default function Kriteria() {
                                         setSelectedItem({ ...selectedItem, tipe: e.target.value })
                                     }
                                 >
+                                    <option disabled selected value> -- select an option -- </option>
                                     <option value="Kualitatif">Kualitatif</option>
                                     <option value="Kuantitatif">Kuantitatif</option>
                                 </select>
