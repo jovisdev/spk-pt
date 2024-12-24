@@ -58,7 +58,7 @@ export default function Penilaian(){
                                 <td className="px-6 py-4">{alternatif.nama}</td>
                                 <td className="px-6 py-4 space-x-2 w-1/4">
                                     <button
-                                        onClick={() => navigate(`/penilaian/alternatif/${alternatif.id}`, {state: {nama: alternatif.nama}})}
+                                        onClick={() => navigate(`/penilaian/alternatif/${alternatif.id}`, {state: {nama: alternatif.nama, kode: alternatif.kode}})}
                                         className="font-medium text-blue-600 hover:underline"
                                     >
                                         Nilai Pelamar
@@ -68,6 +68,12 @@ export default function Penilaian(){
                         ))}
                     </tbody>
                 </table>
+                <button
+                    onClick={() => navigate('/penilaian/review', {state: {nama: alternatif.nama, kode: alternatif.kode}})}
+                    className="font-medium text-blue-600 hover:underline"
+                >
+                    Review Penilaian
+                </button>
             </div>
         </div>
       </>

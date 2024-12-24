@@ -14,6 +14,8 @@ import Penilaian from "./pages/Data-penilaian"
 import SubKriteria from "./pages/Data-subkriteria"
 import PenilaianAlternatif from "./pages/Penilaian"
 import UnauthorizedPage from "./pages/Unauthorized"
+import Perhitungan from "./pages/Perhitungan"
+import PenilaianReview from "./pages/Penilaian-review"
 // import Perhitungan from "./pages/Perhitungan"
 
 function App() {
@@ -54,13 +56,28 @@ function App() {
             }/>
 
             <Route path="/penilaian" element={
-              <PrivateRoute allowedRoles={["Super Admin"]}>
+              <PrivateRoute requiredRole="Super Admin">
                 <Penilaian />
               </PrivateRoute>
             }/>
 
-            {/* <Route path="/perhitungan" element={<Perhitungan/>}/> */}
-            <Route path="/penilaian/alternatif/:id" element={<PenilaianAlternatif/>}/>
+            <Route path="/perhitungan" element={
+              <PrivateRoute requiredRole="Super Admin">
+                <Perhitungan />
+              </PrivateRoute>
+            }/>
+
+            <Route path="/penilaian/review" element={
+              <PrivateRoute requiredRole="Super Admin">
+                <PenilaianReview />
+              </PrivateRoute>
+            }/>
+
+            <Route path="/penilaian/alternatif/:alternatif_id" element={
+              <PrivateRoute requiredRole="Super Admin">
+                <PenilaianAlternatif />
+              </PrivateRoute>
+            }/>
           </Routes>
         </Router>
       </PersistGate>
