@@ -19,7 +19,7 @@ export default function PenilaianReview(){
                 const [kriteriaRes, alternatifRes, penilaianRes] = await Promise.all([
                     axios.get(import.meta.env.VITE_API_KRITERIA),
                     axios.get(import.meta.env.VITE_API_ALTERNATIF),
-                    axios.get(import.meta.env.VITE_API_PENILAIAN),
+                    axios.get(import.meta.env.VITE_API_PENILAIANAWAL),
                 ]);
     
                 const kriteria = kriteriaRes.data;

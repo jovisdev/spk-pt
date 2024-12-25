@@ -17,7 +17,7 @@ export default function Dashboard(){
                     axios.get(import.meta.env.VITE_API_KRITERIA),
                     axios.get(import.meta.env.VITE_API_SUBKRITERIA),
                     axios.get(import.meta.env.VITE_API_ALTERNATIF),
-                    axios.get(import.meta.env.VITE_API_PENILAIAN),
+                    axios.get(import.meta.env.VITE_API_PENILAIANKONVERSI),
                 ]);
 
                 // Update state dengan jumlah data

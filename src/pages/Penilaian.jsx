@@ -93,7 +93,7 @@ export default function PenilaianAlternatif() {
                                     {subKriteria
                                         .filter((sk) => sk.kriteria_id === k.id)
                                         .map((sk) => (
-                                            <option key={sk.id} value={sk.subkriteria}>
+                                            <option key={sk.id} value={sk.bobot}>
                                                 {sk.subkriteria}
                                             </option>
                                         ))}

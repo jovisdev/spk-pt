@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Perhitungan(){
+export default function PerhitunganMetode(){
 
     const navigate = useNavigate()
 
@@ -19,7 +19,7 @@ export default function Perhitungan(){
                 const [kriteriaRes, alternatifRes, penilaianRes] = await Promise.all([
                     axios.get(import.meta.env.VITE_API_KRITERIA),
                     axios.get(import.meta.env.VITE_API_ALTERNATIF),
-                    axios.get(import.meta.env.VITE_API_PENILAIANAWAL),
+                    axios.get(import.meta.env.VITE_API_PENILAIANKONVERSI),
                 ]);
     
                 const kriteria = kriteriaRes.data;
@@ -68,10 +68,9 @@ export default function Perhitungan(){
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
                                     <th scope="col" className="px-6 py-3">Kode</th>
-                                    <th scope="col" className="px-6 py-3">Nama</th>
                                     {kriteria.length > 0 ? (
                                         kriteria.map((item) => (
-                                            <th key={item.id} scope="col" className="px-6 py-3">{item.kriteria}</th>
+                                            <th key={item.id} scope="col" className="px-6 py-3">{item.kode}</th>
                                         ))
                                     ) : (
                                         <th colSpan="6" className="text-center py-4">Tidak ada data</th>
@@ -83,7 +82,6 @@ export default function Perhitungan(){
                                 alternatif.map((item) => (
                                     <tr key={item.id} className="odd:bg-white even:bg-gray-50 border-b">
                                         <td className="px-6 py-4">{item.kode}</td>
-                                        <td className="px-6 py-4">{item.nama}</td>
                                         {item.nilai.map((n, index) => (
                                             <td key={index} className="px-6 py-4">
                                                 {n}
@@ -104,7 +102,7 @@ export default function Perhitungan(){
 
                         <div className="flex justify-end m-2">
                             <button
-                                onClick={() => navigate("/perhitungan/metode")}
+                                onClick={() => navigate("/penilaian")}
                                 className="bg-gray-800 text-white text-sm p-2 rounded transition hover:bg-gray-700"
                             >
                                 Konversi

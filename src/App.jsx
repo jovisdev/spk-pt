@@ -16,6 +16,7 @@ import PenilaianAlternatif from "./pages/Penilaian"
 import UnauthorizedPage from "./pages/Unauthorized"
 import Perhitungan from "./pages/Perhitungan"
 import PenilaianReview from "./pages/Penilaian-review"
+import PerhitunganMetode from "./pages/Perhitungan-Metode"
 // import Perhitungan from "./pages/Perhitungan"
 
 function App() {
@@ -61,12 +62,6 @@ function App() {
               </PrivateRoute>
             }/>
 
-            <Route path="/perhitungan" element={
-              <PrivateRoute requiredRole="Super Admin">
-                <Perhitungan />
-              </PrivateRoute>
-            }/>
-
             <Route path="/penilaian/review" element={
               <PrivateRoute requiredRole="Super Admin">
                 <PenilaianReview />
@@ -76,6 +71,18 @@ function App() {
             <Route path="/penilaian/alternatif/:alternatif_id" element={
               <PrivateRoute requiredRole="Super Admin">
                 <PenilaianAlternatif />
+              </PrivateRoute>
+            }/>
+
+            <Route path="/perhitungan" element={
+              <PrivateRoute requiredRole="Super Admin">
+                <Perhitungan />
+              </PrivateRoute>
+            }/>
+
+            <Route path="/perhitungan/metode" element={
+              <PrivateRoute requiredRole="Super Admin">
+                <PerhitunganMetode />
               </PrivateRoute>
             }/>
           </Routes>
