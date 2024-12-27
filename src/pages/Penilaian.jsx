@@ -2,6 +2,7 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Infouser from "../components/info-user";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { RingLoader } from "react-spinners";
 
 export default function PenilaianAlternatif() {
     const { alternatif_id } = useParams();
@@ -13,8 +14,11 @@ export default function PenilaianAlternatif() {
     const [subKriteria, setSubKriteria] = useState([]);
     const [penilaian, setPenilaian] = useState({});
 
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         const fetchAllData = async () => {
+            setLoading(true);
             try {
                 const [kriteriaRes, subKriteriaRes] = await Promise.all([
                     axios.get(import.meta.env.VITE_API_KRITERIA),
@@ -22,6 +26,7 @@ export default function PenilaianAlternatif() {
                 ]);
                 setKriteria(kriteriaRes.data);
                 setSubKriteria(subKriteriaRes.data);
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -35,17 +40,16 @@ export default function PenilaianAlternatif() {
 
     const handleAdd = async (e) => {
         e.preventDefault();
+        setLoading(true);
         const data = Object.entries(penilaian).map(([kriteriaId, nilai]) => ({
             alternatif_id : parseInt(alternatif_id),
             kriteria_id: parseInt(kriteriaId),
             nilai,
         }));
-
-        console.log(data);
-
         try {
             await axios.post(import.meta.env.VITE_API_ADDPENILAIAN, data);
             alert("Penilaian berhasil diperbarui.");
+            setLoading(false);
             navigate("/penilaian");
         } catch (error) {
             console.error("Terjadi kesalahan:", error);
@@ -53,13 +57,18 @@ export default function PenilaianAlternatif() {
     };
 
     return (
+        <>
+        {loading ? (
+            <div className="flex items-center justify-center p-40">
+                <RingLoader/>
+            </div>
+        ) : (
         <div className="p-4 sm:ml-64">
             <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg">
                 <Infouser />
                 <div className="mb-4 p-4 bg-gray-50 rounded">
                     <p className="text-gray-700">
-                        Sistem yang dikembangkan hanya digunakan untuk membantu manajemen dalam
-                        proses pengambilan keputusan berdasarkan kriteria yang telah ditentukan.
+                    Penilaian dilakukan secara jujur dan berintegritas tanpa melihat subjektifitas
                     </p>
                 </div>
                 <h1 className="text-xl font-semibold text-gray-700">
@@ -118,6 +127,7 @@ export default function PenilaianAlternatif() {
                     </div>
                 </form>
             </div>
-        </div>
+        </div>)}
+    </>
     );
 }

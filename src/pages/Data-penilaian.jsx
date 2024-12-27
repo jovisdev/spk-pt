@@ -2,20 +2,24 @@ import Infouser from "../components/info-user";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { RingLoader } from "react-spinners";
 
 export default function Penilaian(){
 
     const navigate = useNavigate()
 
+    const [loading, setLoading] = useState(false)
     const [alternatif,setAlternatif] = useState([])
 
     // API
     // GET DATA
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
                 const response = await axios.get(import.meta.env.VITE_API_ALTERNATIF);
                 setAlternatif(response.data);
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -43,6 +47,11 @@ export default function Penilaian(){
                     </div>
                 </div>
 
+                { loading ? (
+                            <div className="flex items-center justify-center p-40">
+                                <RingLoader/>
+                            </div>
+                        ):(
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
@@ -68,6 +77,7 @@ export default function Penilaian(){
                         ))}
                     </tbody>
                 </table>
+                )}
                 <button
                     onClick={() => navigate('/penilaian/review', {state: {nama: alternatif.nama, kode: alternatif.kode}})}
                     className="font-medium text-blue-600 hover:underline"

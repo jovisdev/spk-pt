@@ -1,6 +1,7 @@
 import Infouser from "../components/info-user";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { RingLoader } from "react-spinners";
 
 export default function Alternatif() {
 
@@ -8,6 +9,7 @@ export default function Alternatif() {
     const [isOpenUbah, setIsOpenUbah] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [alternatif,setAlternatif] = useState([])
+    const [loading, setLoading] = useState(false);
 
     //  / Toggle form/modal ubah
     const toggleFormUbah = (alternatif) => {
@@ -27,9 +29,11 @@ export default function Alternatif() {
     // GET DATA
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
                 const response = await axios.get(import.meta.env.VITE_API_ALTERNATIF);
                 setAlternatif(response.data);
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -47,6 +51,7 @@ export default function Alternatif() {
 
     const handleAdd = async (e) => {
         e.preventDefault();
+        setLoading(true);
         const data = {
             kode,
             nama,
@@ -63,6 +68,7 @@ export default function Alternatif() {
             setAlamat('');
             setUsia('')
             if (response.status === 200 || response.status === 201) {
+                setLoading(false);
                 window.alert('Alternatif berhasil ditambahkan.');
                 closeModal()
             }
@@ -73,6 +79,7 @@ export default function Alternatif() {
     };
 
     const handleUpdate = async () => {
+        setLoading(true);
         try {
             const updatedItem = { ...selectedItem };
     
@@ -86,6 +93,7 @@ export default function Alternatif() {
                 const updatedAlternatif = alternatif.map((alternatif) =>
                     alternatif.id === updatedItem.id ? updatedItem : alternatif
                 );
+                setLoading(false);
                 setAlternatif(updatedAlternatif);
                 closeModal(); // Menutup modal setelah sukses
             } else {
@@ -99,6 +107,7 @@ export default function Alternatif() {
 
     // hapus alternatif
     const handleDelete = async (alt) => {
+        setLoading(true);
         try {
             // Kirim permintaan DELETE untuk item yang dipilih
             const response = await axios.delete(`${import.meta.env.VITE_API_DELETEALTERNATIF}/${alt.id}`);
@@ -106,10 +115,10 @@ export default function Alternatif() {
             // Periksa status dari respons
             if (response.status === 200) {
                 window.alert(response.data.message);
-    
                 // Hapus item yang dipilih dari state kriteria
                 const updatedAlternatif = alternatif.filter(k => k.id !== alt.id);
                 setKriteria(updatedAlternatif);
+                setLoading(false);
             }
         } catch (error) {
             console.log('Terjadi kesalahan saat menghapus data.', error);
@@ -134,10 +143,16 @@ export default function Alternatif() {
                         </div>
                     </div>
 
+                
                     <div className="flex justify-end m-2">
                         <button className="bg-gray-800 text-white text-sm p-2 rounded hover:bg-gray-700 transition" onClick={toggleFormTambah}>Tambah Pelamar</button>
                     </div>
 
+                    {loading ? (
+                                <div className="flex items-center justify-center">
+                                    <RingLoader/>
+                                </div>
+                            ) : (
                     <div className="relative overflow-x-auto sm:rounded-lg">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -180,6 +195,7 @@ export default function Alternatif() {
                             </button>
                         </div>
                     </div>
+                            )}
                 </div>
 
                 {isOpenTambah && (

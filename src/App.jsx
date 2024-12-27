@@ -17,6 +17,7 @@ import UnauthorizedPage from "./pages/Unauthorized"
 import Perhitungan from "./pages/Perhitungan"
 import PenilaianReview from "./pages/Penilaian-review"
 import PerhitunganMetode from "./pages/Perhitungan-Metode"
+import HasilPerhitungan from "./pages/Hasil-Perhitungan"
 // import Perhitungan from "./pages/Perhitungan"
 
 function App() {
@@ -83,6 +84,12 @@ function App() {
             <Route path="/perhitungan/metode" element={
               <PrivateRoute requiredRole="Super Admin">
                 <PerhitunganMetode />
+              </PrivateRoute>
+            }/>
+
+            <Route path="/perhitungan/metode/hasil" element={
+              <PrivateRoute requiredRole="Super Admin">
+                <HasilPerhitungan />
               </PrivateRoute>
             }/>
           </Routes>

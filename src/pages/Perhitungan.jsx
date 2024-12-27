@@ -2,6 +2,7 @@ import Infouser from "../components/info-user";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { RingLoader } from "react-spinners";
 
 export default function Perhitungan(){
 
@@ -9,12 +10,14 @@ export default function Perhitungan(){
 
     const [kriteria, setKriteria] = useState([])
     const [alternatif, setAlternatif] = useState([])
+    const [loading, setLoading] = useState(false)
 
     // API
     // GET DATA
 
     useEffect(() => {
         const fetchAllData = async () => {
+            setLoading(true);
             try {
                 const [kriteriaRes, alternatifRes, penilaianRes] = await Promise.all([
                     axios.get(import.meta.env.VITE_API_KRITERIA),
@@ -40,6 +43,7 @@ export default function Perhitungan(){
     
                 setKriteria(kriteria);
                 setAlternatif(alternatifWithPenilaian);
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -61,6 +65,11 @@ export default function Perhitungan(){
                     </div>
                 </div>
 
+                {loading ? (
+                    <div className="flex items-center justify-center">
+                        <RingLoader/>
+                    </div>
+                ):(
                 <div className="border-2 border-gray-200">
                     <h1 className="m-2 text-gray-700 text-lg font-semibold">Konversi Data Awal</h1>
                     <div className="relative overflow-x-auto sm:rounded-lg">
@@ -112,6 +121,7 @@ export default function Perhitungan(){
                         </div>
                     </div>
                 </div>
+                )}
             </div>
         </div>
       </>

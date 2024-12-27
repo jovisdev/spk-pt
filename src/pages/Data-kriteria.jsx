@@ -2,6 +2,7 @@ import Infouser from "../components/info-user";
 import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { RingLoader } from "react-spinners";
 
 export default function Kriteria() {
     const navigate = useNavigate()
@@ -13,15 +14,18 @@ export default function Kriteria() {
     const [error, setError] = useState("");
     const [isOpenUbah, setIsOpenUbah] = useState(false);
     const [isOpenTambah, setIsOpenTambah] = useState(false);
+    const [loading, setLoading] = useState(false);
 
 
     // API
     // GET DATA
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
                 const response = await axios.get(import.meta.env.VITE_API_KRITERIA);
                 setKriteria(response.data);
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -75,6 +79,7 @@ export default function Kriteria() {
     };
 
     const ubah = async () => {
+        setLoading(true);
         try {
             const updatedItem = { ...selectedItem, bobot: parseFloat(value) };
     
@@ -88,6 +93,7 @@ export default function Kriteria() {
                 const updatedKriteria = kriteria.map((item) =>
                     item.id === updatedItem.id ? updatedItem : item
                 );
+                setLoading(false);
                 setKriteria(updatedKriteria);
                 closeModal(); // Menutup modal setelah sukses
             } else {
@@ -109,6 +115,7 @@ export default function Kriteria() {
 
     // hapus kriteria
     const handleDelete = async (item) => {
+        setLoading(true);
         try {
             // Kirim permintaan DELETE untuk item yang dipilih
             const response = await axios.delete(`${import.meta.env.VITE_API_DELETEKRITERIA}/${item.id}`);
@@ -119,6 +126,7 @@ export default function Kriteria() {
     
                 // Hapus item yang dipilih dari state kriteria
                 const updatedKriteria = kriteria.filter(k => k.id !== item.id);
+                setLoading(false);
                 setKriteria(updatedKriteria);
             }
         } catch (error) {
@@ -135,6 +143,7 @@ export default function Kriteria() {
 
     const handleAdd = async (e) => {
         e.preventDefault();
+        setLoading(true);
         const data = {
             kode,
             kriteriain,
@@ -153,12 +162,12 @@ export default function Kriteria() {
                 window.alert('Kriteria berhasil ditambahkan.');
                 closeModal()
             }
+            setLoading(false);
             window.location.reload();
         } catch (error) {
             console.error('Terjadi kesalahan:', error);
         }
     };
-    
     
     return (
         <>
@@ -182,6 +191,11 @@ export default function Kriteria() {
                         <button className="bg-gray-800 text-white text-sm p-2 rounded hover:bg-gray-700 transition" onClick={toggleFormTambah}>Tambah Kirteria</button>
                     </div>
 
+                    {loading ? (
+                                <div className="flex items-center justify-center">
+                                    <RingLoader/>
+                                </div>
+                            ):(
                     <div className="relative overflow-x-auto sm:rounded-lg">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -246,6 +260,7 @@ export default function Kriteria() {
                             </button>
                         </div>
                     </div>
+                    )}
                 </div>
                 {isOpenUbah && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

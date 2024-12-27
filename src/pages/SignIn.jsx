@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../utility/reducers";
 import { useState } from "react";
 import axios from "axios";
+import { PacmanLoader } from "react-spinners";
 
 import logo from "../assets/Logo Atas.png";
 
@@ -10,11 +11,13 @@ export default function Signin(){
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setLoading(true);
         
         // Contoh request ke server API (misalnya, menggunakan fetch atau axios)
         try {
@@ -30,7 +33,6 @@ export default function Signin(){
               localStorage.setItem("nama", response.data.name)
               localStorage.setItem("token", response.data.accessToken)
 
-          
               // Dispatch ke Redux store (hanya data yang dibutuhkan)
               dispatch(
                 login({
@@ -38,9 +40,9 @@ export default function Signin(){
                   jabatan: response.data.jabatan,
                 })
               );
-          
-              navigate('/dashboard')
             }
+            setLoading(false);
+            navigate('/dashboard')
           } catch (e) {
             if (e.response && (e.response.status === 400 || e.response.status === 404)) {
               // Jika username atau password salah, tampilkan alert
@@ -53,6 +55,10 @@ export default function Signin(){
     }
     return(
         <>
+            {loading ? ( 
+            <div className="flex items-center justify-center h-screen">
+                <PacmanLoader/>
+            </div> ) : (
             <div className="rounded-sm border border-stroke shadow-default h-screen">
             <div className="flex flex-wrap items-center">
             <div className="hidden w-full xl:block xl:w-1/2">
@@ -153,8 +159,8 @@ export default function Signin(){
                     </div>
                 </div>
             </div>
-            
             </div>
+            )}
         </>
     )
 }

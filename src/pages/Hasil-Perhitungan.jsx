@@ -4,14 +4,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RingLoader } from "react-spinners";
 
-export default function PerhitunganMetode(){
+export default function HasilPerhitungan(){
 
     const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
 
-    const [kriteria, setKriteria] = useState([])
-    const [alternatif, setAlternatif] = useState([])
+    const [prioritas, setPrioritas] = useState([])
 
     // API
     // GET DATA
@@ -20,30 +19,10 @@ export default function PerhitunganMetode(){
         const fetchAllData = async () => {
             setLoading(true);
             try {
-                const [kriteriaRes, alternatifRes, penilaianRes] = await Promise.all([
-                    axios.get(import.meta.env.VITE_API_KRITERIA),
-                    axios.get(import.meta.env.VITE_API_ALTERNATIF),
-                    axios.get(import.meta.env.VITE_API_PENILAIANKONVERSI),
-                ]);
-    
-                const kriteria = kriteriaRes.data;
-                const alternatif = alternatifRes.data;
-                const penilaian = penilaianRes.data;
-    
-                // Gabungkan penilaian ke alternatif
-                const alternatifWithPenilaian = alternatif.map((item) => {
-                    const nilai = kriteria.map((k) => {
-                        // Cari nilai berdasarkan alternatif_id dan kriteria_id
-                        const matchedPenilaian = penilaian.find(
-                            (p) => p.alternatif_id === item.id && p.kriteria_id === k.id
-                        );
-                        return matchedPenilaian ? matchedPenilaian.nilai : '-';
-                    });
-                    return { ...item, nilai }; // Tambahkan nilai ke setiap alternatif
-                });
-    
-                setKriteria(kriteria);
-                setAlternatif(alternatifWithPenilaian);
+                const response = await axios(import.meta.env.VITE_API_DATAPREPARE)
+                const dataPriority = response.data.priority
+                setPrioritas(dataPriority)
+
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -77,31 +56,21 @@ export default function PerhitunganMetode(){
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope="col" className="px-6 py-3">Kode</th>
-                                    {kriteria.length > 0 ? (
-                                        kriteria.map((item) => (
-                                            <th key={item.id} scope="col" className="px-6 py-3">{item.kode}</th>
-                                        ))
-                                    ) : (
-                                        <th colSpan="6" className="text-center py-4">Tidak ada data</th>
-                                    )}
+                                    <th scope="col" className="px-6 py-3">Prioritas</th>
+                                    <th scope="col" className="px-6 py-3">Score</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            {alternatif.length > 0 ? (
-                                alternatif.map((item) => (
-                                    <tr key={item.id} className="odd:bg-white even:bg-gray-50 border-b">
-                                        <td className="px-6 py-4">{item.kode}</td>
-                                        {item.nilai.map((n, index) => (
-                                            <td key={index} className="px-6 py-4">
-                                                {n}
-                                            </td>
-                                        ))}
+                            {prioritas.length > 0 ? (
+                                prioritas.map((item) => (
+                                    <tr className="odd:bg-white even:bg-gray-50 border-b">
+                                        <td className="px-6 py-4">{item.alternatif}</td>
+                                        <td className="px-6 py-4">{item.score}</td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={kriteria.length + 2} className="px-6 py-4 text-center">
+                                    <td colSpan={prioritas.length + 2} className="px-6 py-4 text-center">
                                         Tidak ada data.
                                     </td>
                                 </tr>
@@ -112,10 +81,9 @@ export default function PerhitunganMetode(){
 
                         <div className="flex justify-end m-2">
                             <button
-                                onClick={() => navigate("/perhitungan/metode/hasil")}
                                 className="bg-gray-800 text-white text-sm p-2 rounded transition hover:bg-gray-700"
                             >
-                                Mulai Perhitungan
+                                Simpan Hasil
                             </button>
                         </div>
                     </div>

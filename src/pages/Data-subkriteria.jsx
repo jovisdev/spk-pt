@@ -2,12 +2,12 @@ import Infouser from "../components/info-user";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { RingLoader } from "react-spinners";
 
 export default function SubKriteria() {
 
     const navigate = useNavigate();
 
-     // modal tambah dan ubah
     const [isOpenTambah, setIsOpenTambah] = useState(false);
     const [isOpenUbah, setIsOpenUbah] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
@@ -15,11 +15,10 @@ export default function SubKriteria() {
     const [itemsSubKriteria, setSubKriteria] = useState([]);
     const [itemsKriteria, setKriteria] = useState([]);
 
-    // inputan
     const [subKriteriain, setSubKriteriain] = useState('');
     const [bobot, setBobot] = useState('');
 
-    //  naikkan semua state
+    const [loading, setLoading] = useState(false);
 
     //  / Toggle form/modal ubah
     const toggleFormUbah = (skriteria) => {
@@ -49,9 +48,17 @@ export default function SubKriteria() {
     // GET DATA
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
-                const response = await axios.get(import.meta.env.VITE_API_SUBKRITERIA);
-                setSubKriteria(response.data);
+                const [subkriteriaRes, kriteriaRes] = await Promise.all([
+                    axios.get(import.meta.env.VITE_API_SUBKRITERIA),
+                    axios.get(import.meta.env.VITE_API_KRITERIA),
+                ]);
+                const subKriteriadData = subkriteriaRes.data;
+                const kriteriaData = kriteriaRes.data;
+                setSubKriteria(subKriteriadData);
+                setKriteria(kriteriaData);
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -60,21 +67,10 @@ export default function SubKriteria() {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(import.meta.env.VITE_API_KRITERIA);
-                setKriteria(response.data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-
-        fetchData();
-    }, []);
 
     const handleAdd = async (e) => {
         e.preventDefault();
+        setLoading(true);
         const data = {
             kriteria_id : selectedItem.id,
             subkriteria : subKriteriain,
@@ -86,6 +82,7 @@ export default function SubKriteria() {
             setSubKriteriain('');
             setBobot('');
             if (response.status === 200 || response.status === 201) {
+                setLoading(false);
                 window.alert('Sub Kriteria berhasil ditambahkan.');
                 closeModal();
             }
@@ -99,6 +96,7 @@ export default function SubKriteria() {
     
     // ubah subkriteria
     const ubah = async () => {
+        setLoading(true);
         try {
             const updatedItem = { ...selectedItem, bobot: parseFloat(value) };
     
@@ -112,6 +110,7 @@ export default function SubKriteria() {
                 const updatedKriteria = itemsSubKriteria.map((item) =>
                     item.id === updatedItem.id ? updatedItem : item
                 );
+                setLoading(false);
                 setSubKriteria(updatedKriteria);
                 closeModal(); // Menutup modal setelah sukses
             } else {
@@ -125,6 +124,7 @@ export default function SubKriteria() {
 
     // hapus subkriteria
     const handleDelete = async (skriteria) => {
+        setLoading(true);
         try {
             // Kirim permintaan DELETE untuk item yang dipilih
             const response = await axios.delete(`${import.meta.env.VITE_API_DELETESUBKRITERIA}/${skriteria.id}`);
@@ -135,6 +135,7 @@ export default function SubKriteria() {
     
                 // Hapus item yang dipilih dari state kriteria
                 const updatedSubKriteria = itemsSubKriteria.filter(s => s.id !== skriteria.id);
+                setLoading(false);
                 setSubKriteria(updatedSubKriteria);
                 closeModal();
             }
@@ -162,7 +163,12 @@ export default function SubKriteria() {
                     </div>
 
                     {/* area tabel */}
-                    {itemsKriteria
+                    {loading ? (
+                        <div className="flex items-center justify-center">
+                            <RingLoader/>
+                        </div>
+                    ):(
+                    itemsKriteria
                     .filter((kriteria) => kriteria.tipe !== "Kuantitatif")
                     .map((kriteria) => {
                         const subkriteria = itemsSubKriteria.filter(
@@ -228,7 +234,8 @@ export default function SubKriteria() {
                                 </div>
                             </div>
                         );
-                    })}
+                    })
+                    )}
 
                     <div className="flex justify-end m-2">
                         <button
