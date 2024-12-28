@@ -1,6 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
-import logocg from "/src/assets/Logo Atas.png"
+import logocg from "/src/assets/Logo Atas.png";
+import { useDispatch } from "react-redux";
+import { logout } from "../utility/reducers";
 
 export default function Sidenav() {
   const navigate = useNavigate();
@@ -23,6 +25,14 @@ export default function Sidenav() {
 
   // Fungsi untuk mengecek apakah path saat ini sesuai dengan menu
   const isActive = (path) => location.pathname === path;
+
+  // logout
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    localStorage.clear()
+    dispatch(logout())
+    navigate('/')
+  }
 
   return (
     <>
@@ -233,9 +243,25 @@ export default function Sidenav() {
             <li>
               <button
                 className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
+                  isActive('/user') ? 'bg-gray-200 text-gray-900' : 'text-gray-900'
+                }`}
+                onClick={() => navigate('/user')}
+              >
+                <svg className="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16" id="Data">
+                  <path fill="#757575" d="M3 3C1.89543 3 1 3.89543 1 5V11C1 11.4134 1.12542 11.7975 1.34029 12.1163L2.80997 7.07982C2.99669 6.43991 3.58332 6 4.24991 6H13.003V5.99612C13.003 4.89155 12.1076 3.99612 11.003 3.99612H6.17452L5.06508 3.10942C4.97645 3.03859 4.86637 3 4.75291 3H3Z" class="color212121 svgShape"></path>
+                  <path fill="#757575" d="M14.9413 7.64027C15.0349 7.32021 14.7948 7 14.4614 7H4.24991C4.02771 7 3.83217 7.14664 3.76993 7.35994L2.3109 12.3599C2.21752 12.68 2.45753 13 2.79089 13H12.2505C12.9168 13 13.5033 12.5604 13.6902 11.9208L14.9413 7.64027Z" class="color212121 svgShape"></path>
+                </svg>
+                <span className="ms-3">Manajemen User</span>
+              </button>
+            </li>
+
+            <li>
+              <button
+                type="button"
+                className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
                   isActive('/logout') ? 'bg-gray-200 text-gray-900' : 'text-gray-900'
                 }`}
-                onClick={() => navigate('/logout')}
+                onClick={handleLogout}
               >
                 <svg className="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="Logout">
                   <path d="M53.22 43.92c-1.73 0-3.13 1.41-3.13 3.13l-.07 10.68-36.79-.07.07-51.39 36.79.07v10.6c0 1.73 1.4 3.14 3.13 3.14s3.14-1.41 3.14-3.14V5.85c0-3.23-2.63-5.85-5.85-5.85h-37.7C9.57 0 6.95 2.62 6.95 5.85v52.3c0 3.23 2.62 5.85 5.85 5.85h37.7c3.22 0 5.85-2.62 5.85-5.85V47.06c0-1.73-1.41-3.14-3.13-3.14z" fill="#757575" class="color000000 svgShape"></path>

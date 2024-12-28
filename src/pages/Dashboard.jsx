@@ -1,6 +1,7 @@
 import Infouser from "../components/info-user";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { RingLoader } from "react-spinners";
 
 export default function Dashboard(){
 
@@ -9,9 +10,12 @@ export default function Dashboard(){
     const [alternatif, setAlternatif] = useState("");
     const [penilaian, setPenilaian] = useState("");
 
+    const [loading, setLoading] = useState(false)
+
     useEffect(() => {
         // Fungsi async untuk memanggil API
         const fetchData = async () => {
+            setLoading(true);
             try {
                 const [kriteriaRes, subkriteriaRes, alternatifRes, penilaianRes] = await Promise.all([
                     axios.get(import.meta.env.VITE_API_KRITERIA),
@@ -25,6 +29,7 @@ export default function Dashboard(){
                 setSubKriteria(subkriteriaRes.data.length);
                 setAlternatif(alternatifRes.data.length);
                 setPenilaian(penilaianRes.data.length);
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -61,7 +66,13 @@ export default function Dashboard(){
                         <p class="text-lg text-gray-200">
                             Kriteria
                         </p>
-                        <h1 class="text-4xl font-bold text-white">{kriteria}</h1>
+                        {loading ? (
+                            <div class="flex itemsc-center justify-center">
+                                <RingLoader/>
+                            </div>
+                        ):(
+                            <h1 class="text-4xl font-bold text-white">{kriteria}</h1>
+                        )}
                     </div>
                 </div>
 
@@ -72,7 +83,13 @@ export default function Dashboard(){
                         <p class="text-lg text-gray-200">
                             Sub Kriteria
                         </p>
-                        <h1 class="text-4xl font-bold text-white">{subkriteria}</h1>
+                        {loading ? (
+                            <div class="flex itemsc-center justify-center">
+                                <RingLoader/>
+                            </div>
+                        ):(
+                            <h1 class="text-4xl font-bold text-white">{subkriteria}</h1>
+                        )}
                     </div>
                 </div>
 
@@ -82,7 +99,13 @@ export default function Dashboard(){
                         <p class="text-lg text-gray-200">
                             Alternatif
                         </p>
-                        <h1 class="text-4xl font-bold text-white">{alternatif}</h1>
+                        {loading ? (
+                            <div class="flex itemsc-center justify-center">
+                                <RingLoader/>
+                            </div>
+                        ):(
+                            <h1 class="text-4xl font-bold text-white">{alternatif}</h1>
+                        )}
                     </div>
                 </div>
 
@@ -92,7 +115,13 @@ export default function Dashboard(){
                         <p class="text-lg text-gray-200">
                             Penilaian
                         </p>
-                        <h1 class="text-4xl font-bold text-white">{penilaian}</h1>
+                        {loading ? (
+                            <div class="flex itemsc-center justify-center">
+                                <RingLoader/>
+                            </div>
+                        ):(
+                            <h1 class="text-4xl font-bold text-white">{penilaian}</h1>
+                        )}
                     </div>
                 </div>
 

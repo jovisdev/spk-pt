@@ -1,8 +1,9 @@
+import { useSelector } from 'react-redux'
 import logouser from '/src/assets/profile2.png'
 
 export default function Infouser(){
-    const user = localStorage.getItem('nama')
-    const role = localStorage.getItem('jabatan')
+    const user = useSelector((state) => state.nama)
+    const role = useSelector((state) => state.jabatan)
     return(
         <>
             <div class="flex justify-between mb-4 rounded">

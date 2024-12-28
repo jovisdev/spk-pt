@@ -18,6 +18,8 @@ import Perhitungan from "./pages/Perhitungan"
 import PenilaianReview from "./pages/Penilaian-review"
 import PerhitunganMetode from "./pages/Perhitungan-Metode"
 import HasilPerhitungan from "./pages/Hasil-Perhitungan"
+import UserManagement from "./pages/User-management"
+import DataKeputusan from "./pages/Data-keputusan"
 // import Perhitungan from "./pages/Perhitungan"
 
 function App() {
@@ -90,6 +92,18 @@ function App() {
             <Route path="/perhitungan/metode/hasil" element={
               <PrivateRoute requiredRole="Super Admin">
                 <HasilPerhitungan />
+              </PrivateRoute>
+            }/>
+
+            <Route path="/datakeputusan" element={
+              <PrivateRoute requiredRole="Super Admin">
+                <DataKeputusan />
+              </PrivateRoute>
+            }/>   
+
+            <Route path="/user" element={
+              <PrivateRoute requiredRole="Super Admin">
+                <UserManagement />
               </PrivateRoute>
             }/>
           </Routes>

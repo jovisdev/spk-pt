@@ -28,16 +28,14 @@ export default function Signin(){
           
             // Jika login berhasil
             if (response.status === 200) {
-              // Simpan token dan informasi lain di localStorage (atau sessionStorage)
-              localStorage.setItem("jabatan", response.data.jabatan)
-              localStorage.setItem("nama", response.data.name)
-              localStorage.setItem("token", response.data.accessToken)
 
               // Dispatch ke Redux store (hanya data yang dibutuhkan)
               dispatch(
                 login({
-                  nama: response.data.nama,
-                  jabatan: response.data.jabatan,
+                    id: response.data.userId,
+                    nama: response.data.name,
+                    token: response.data.accessToken,
+                    jabatan: response.data.jabatan,
                 })
               );
             }
@@ -47,6 +45,7 @@ export default function Signin(){
             if (e.response && (e.response.status === 400 || e.response.status === 404)) {
               // Jika username atau password salah, tampilkan alert
               window.alert("Username atau password salah.");
+              setLoading(false);
             } else {
               // Tangani error lain
               console.log("Terjadi kesalahan", e);

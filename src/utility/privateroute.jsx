@@ -1,9 +1,9 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const PrivateRoute = ({ children, requiredRole }) => {
-  const role = localStorage.getItem('jabatan'); // Ambil role dari localStorage
+  const role =  useSelector((state) => state.jabatan)// Ambil role dari localStorage
 
   if (!role) {
     // Jika role tidak ditemukan, redirect ke halaman login

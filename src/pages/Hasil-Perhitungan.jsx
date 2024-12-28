@@ -1,6 +1,7 @@
 import Infouser from "../components/info-user";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RingLoader } from "react-spinners";
 
@@ -11,6 +12,8 @@ export default function HasilPerhitungan(){
     const [loading, setLoading] = useState(false)
 
     const [prioritas, setPrioritas] = useState([])
+    const [alternatif, setAlternatif] = useState([])
+    const [score, setScore] = useState([])
 
     // API
     // GET DATA
@@ -21,7 +24,11 @@ export default function HasilPerhitungan(){
             try {
                 const response = await axios(import.meta.env.VITE_API_DATAPREPARE)
                 const dataPriority = response.data.priority
+                const dataAlternatif = dataPriority.map((item) => ({alternatif: item.alternatif}))
+                const dataScore = dataPriority.map((item) => ({score: item.score}))
                 setPrioritas(dataPriority)
+                setAlternatif(dataAlternatif)
+                setScore(dataScore)
 
                 setLoading(false);
             } catch (error) {
@@ -30,6 +37,26 @@ export default function HasilPerhitungan(){
         };
         fetchAllData();
     }, []);
+
+    console.log(prioritas)
+    
+    const handleSimpan = async () => {
+        setLoading(true);
+        try {
+            const postPromises = prioritas.map((item) =>
+                axios.post(import.meta.env.VITE_API_DATASIMPAN, {
+                    ...item, // Kirim setiap objek
+                })
+            );
+    
+            await Promise.all(postPromises); // Tunggu semua permintaan selesai
+            setLoading(false);
+            alert("Data berhasil disimpan");
+            navigate('/datakeputusan')
+        } catch (error) {
+            console.error("Error posting data:", error);
+        }
+    };
 
     return(
       <>
@@ -51,7 +78,7 @@ export default function HasilPerhitungan(){
                     </div>
                 ):(
                 <div className="border-2 border-gray-200">
-                    <h1 className="m-2 text-gray-700 text-lg font-semibold">Konversi Data Awal</h1>
+                    <h1 className="m-2 text-gray-700 text-lg font-semibold">Nilai Akhir</h1>
                     <div className="relative overflow-x-auto sm:rounded-lg">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -81,6 +108,8 @@ export default function HasilPerhitungan(){
 
                         <div className="flex justify-end m-2">
                             <button
+                                type="button"
+                                onClick={handleSimpan}
                                 className="bg-gray-800 text-white text-sm p-2 rounded transition hover:bg-gray-700"
                             >
                                 Simpan Hasil
