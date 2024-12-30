@@ -72,8 +72,9 @@ export default function Signin(){
                 </div>
             </div>
 
-                <div className="w-full border-stroke xl:w-1/2 xl:border-l-2 h-screen">
-                    <div className="w-full p-4 sm:p-12.5 xl:p-17.5 mt-20">
+                <div className="w-full justify-center border-stroke xl:w-1/2 xl:border-l-2 h-screen">
+                <div className="h-full w-full flex items-center">
+                    <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
                     <p className="text-gray-700 font-semibold mb-5">Fitur akan disesuaikan autentikasi pengguna.</p>
 
                     <form>
@@ -156,6 +157,7 @@ export default function Signin(){
                         </div>
                     </form>
                     </div>
+                </div>
                 </div>
             </div>
             </div>
