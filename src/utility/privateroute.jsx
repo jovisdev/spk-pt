@@ -3,15 +3,15 @@ import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const PrivateRoute = ({ children, requiredRole }) => {
-  const role =  useSelector((state) => state.jabatan)// Ambil role dari localStorage
+  const role = useSelector((state) => state.jabatan); // Ambil role dari Redux
 
   if (!role) {
     // Jika role tidak ditemukan, redirect ke halaman login
-    return <Navigate to="/unauthorized" />;
+    return <Navigate to="/login" />;
   }
 
-  if (requiredRole && role !== requiredRole) {
-    // Jika role tidak sesuai dengan yang dibutuhkan, redirect ke halaman login
+  if (requiredRole && !requiredRole.includes(role)) {
+    // Jika role tidak termasuk dalam daftar role yang diizinkan
     return <Navigate to="/unauthorized" />;
   }
 
@@ -20,3 +20,12 @@ const PrivateRoute = ({ children, requiredRole }) => {
 };
 
 export default PrivateRoute;
+
+
+// export const PrivateRoute = ({ requiredRole, children }) => {
+//   const userRole = getUserRole(); // Retrieve user role (e.g., from context or state)
+//   if (!requiredRole.includes(userRole)) {
+//     return <Navigate to="/unauthorized" />; // Redirect if not authorized
+//   }
+//   return children;
+// };

@@ -1,10 +1,12 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import logocg from "/src/assets/Logo Atas.png";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../utility/reducers";
 
 export default function Sidenav() {
+  // kondisi fitur role
+  const role = useSelector((state) => state.jabatan);
   const navigate = useNavigate();
   const location = useLocation(); // Untuk mendapatkan path saat ini
 
@@ -120,11 +122,11 @@ export default function Sidenav() {
                   <path d="M6 26h16V6H6v20zm0 16h16V30H6v12zm20 0h16V22H26v20zm0-36v12h16V6H26z" fill="#757575" class="color000000 svgShape"></path>
                 </svg>
 
-
                 <span className="ms-3">Dashboard</span>
               </button>
             </li>
 
+            {['Super Admin' , 'Manajer'].includes(role) && (
             <li>
               <button
                 className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
@@ -147,7 +149,9 @@ export default function Sidenav() {
                 <span className="ms-3">Data Kriteria</span>
               </button>
             </li>
+            )}
 
+            {['Super Admin' , 'Manajer'].includes(role) && (
             <li>
               <button
                 className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
@@ -175,6 +179,7 @@ export default function Sidenav() {
                 <span className="ms-3">Data Sub Kriteria</span>
               </button>
             </li>
+            )}
 
             <li>
               <button
@@ -191,6 +196,7 @@ export default function Sidenav() {
               </button>
             </li>
 
+            {['Super Admin', 'Koor. Personal Trainer'].includes(role) && (
             <li>
               <button
                 className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
@@ -206,7 +212,9 @@ export default function Sidenav() {
                 <span className="ms-3">Penilaian</span>
               </button>
             </li>
+            )}
 
+            {['Super Admin', 'Koor. Personal Trainer'].includes(role) && (
             <li>
               <button
                 className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
@@ -224,6 +232,7 @@ export default function Sidenav() {
                 <span className="ms-3">Perhitungan</span>
               </button>
             </li>
+            )}
 
             <li>
               <button
@@ -240,6 +249,7 @@ export default function Sidenav() {
               </button>
             </li>
 
+            {role === 'Super Admin' && (
             <li>
               <button
                 className={`w-full flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
@@ -254,6 +264,7 @@ export default function Sidenav() {
                 <span className="ms-3">Manajemen User</span>
               </button>
             </li>
+            )}
 
             <li>
               <button

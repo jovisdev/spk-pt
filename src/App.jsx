@@ -36,67 +36,67 @@ function App() {
             <Route path="/signin" element={<Signin/>}/>
 
             <Route path="/dashboard" element={
-              <PrivateRoute requiredRole="Super Admin">
+              <PrivateRoute requiredRole={["Super Admin" , "Koor. Personal Trainer", "Manajer"]}>
                 <Dashboard />
               </PrivateRoute>
             }/>
 
             <Route path="/kriteria" element={
-              <PrivateRoute requiredRole="Super Admin">
+              <PrivateRoute requiredRole={["Super Admin", "Manajer"]}>
                 <Kriteria />
               </PrivateRoute>
             }/>
 
             <Route path="/subkriteria" element={
-              <PrivateRoute requiredRole="Super Admin">
+              <PrivateRoute requiredRole={["Super Admin", "Manajer"]}>
                 <SubKriteria />
               </PrivateRoute>
             }/>
 
             <Route path="/alternatif" element={
-              <PrivateRoute requiredRole="Super Admin">
+              <PrivateRoute requiredRole={["Super Admin" , "Koor. Personal Trainer", "Manajer"]}>
                 <Alternatif />
               </PrivateRoute>
             }/>
 
             <Route path="/penilaian" element={
-              <PrivateRoute requiredRole="Super Admin">
+              <PrivateRoute requiredRole={["Super Admin" , "Koor. Personal Trainer"]}>
                 <Penilaian />
               </PrivateRoute>
             }/>
 
             <Route path="/penilaian/review" element={
-              <PrivateRoute requiredRole="Super Admin">
+              <PrivateRoute requiredRole={["Super Admin" , "Koor. Personal Trainer"]}>
                 <PenilaianReview />
               </PrivateRoute>
             }/>
 
             <Route path="/penilaian/alternatif/:alternatif_id" element={
-              <PrivateRoute requiredRole="Super Admin">
+              <PrivateRoute requiredRole={["Super Admin" , "Koor. Personal Trainer"]}>
                 <PenilaianAlternatif />
               </PrivateRoute>
             }/>
 
             <Route path="/perhitungan" element={
-              <PrivateRoute requiredRole="Super Admin">
+              <PrivateRoute requiredRole={["Super Admin" , "Koor. Personal Trainer"]}>
                 <Perhitungan />
               </PrivateRoute>
             }/>
 
             <Route path="/perhitungan/metode" element={
-              <PrivateRoute requiredRole="Super Admin">
+              <PrivateRoute requiredRole={["Super Admin" , "Koor. Personal Trainer"]}>
                 <PerhitunganMetode />
               </PrivateRoute>
             }/>
 
             <Route path="/perhitungan/metode/hasil" element={
-              <PrivateRoute requiredRole="Super Admin">
+              <PrivateRoute requiredRole={["Super Admin" , "Koor. Personal Trainer"]}>
                 <HasilPerhitungan />
               </PrivateRoute>
             }/>
 
             <Route path="/datakeputusan" element={
-              <PrivateRoute requiredRole="Super Admin">
+              <PrivateRoute requiredRole={["Super Admin" , "Koor. Personal Trainer", "Manajer"]}>
                 <DataKeputusan />
               </PrivateRoute>
             }/>   
