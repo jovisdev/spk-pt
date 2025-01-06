@@ -117,7 +117,7 @@ export default function Alternatif() {
                 window.alert(response.data.message);
                 // Hapus item yang dipilih dari state kriteria
                 const updatedAlternatif = alternatif.filter(k => k.id !== alt.id);
-                setKriteria(updatedAlternatif);
+                setAlternatif(updatedAlternatif);
                 setLoading(false);
             }
         } catch (error) {

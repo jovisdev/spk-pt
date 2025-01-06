@@ -1,6 +1,7 @@
 import Infouser from "../components/info-user";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RingLoader } from "react-spinners";
 
@@ -51,6 +52,26 @@ export default function PerhitunganMetode(){
         };
         fetchAllData();
     }, []);
+
+    const userId = useSelector((state) => state.id)
+    const jumlah_alternatif = alternatif.length
+    const handleHitung = async() => {
+        setLoading(true)
+
+        try {
+            await axios.post(import.meta.env.VITE_API_ADDREPORT,{
+                userId,
+                jumlah_alternatif
+            })
+            alert('Memulai perhitungan')
+            setLoading(false)
+            navigate("/perhitungan/metode/hasil")
+        } catch (error) {
+            console.error("Error hitung data:", error)
+        } finally{
+            setLoading(false)
+        }
+    }
 
     return(
       <>
@@ -112,7 +133,7 @@ export default function PerhitunganMetode(){
 
                         <div className="flex justify-end m-2">
                             <button
-                                onClick={() => navigate("/perhitungan/metode/hasil")}
+                                onClick={() => handleHitung()}
                                 className="bg-gray-800 text-white text-sm p-2 rounded transition hover:bg-gray-700"
                             >
                                 Mulai Perhitungan

@@ -9,7 +9,20 @@ import logocg from "/src/assets/Logo Atas.png";
 export default function DataKeputusan(){
 
     const [loading, setLoading] = useState(false)
-    const [results,setResults] = useState([])
+    const [report,setReport] = useState([])
+    const [result, setResult] = useState([])
+
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [isOpen, setIsOpen] = useState(false)
+
+    const toggleCetakOpen = (report) => {
+        setSelectedItem(report)
+        setIsOpen(true)
+    }
+    const toggleCetakClose = () => {
+        setIsOpen(false)
+        setSelectedItem(null)
+    }
 
     // API
     // GET DATA
@@ -17,8 +30,8 @@ export default function DataKeputusan(){
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(import.meta.env.VITE_API_DATASCORE);
-                setResults(response.data);
+                const response = await axios.get(import.meta.env.VITE_API_REPORT);
+                setReport(response.data);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -28,20 +41,37 @@ export default function DataKeputusan(){
         fetchData();
     }, []);
 
+    const getResult = async (rpt) => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_API_DATASCORE}/${rpt.id}`);
+            setResult(response.data);
+            setLoading(false);
+            toggleCetakOpen(true);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            setLoading(false);
+        }
+    };
+
     const printRef = useRef();
     const handleCetak = async () => {
 
-        const element = printRef.current;
-        const canvas = await html2canvas(element);
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF("p", "mm", "a4");
-    
-        // Mengatur ukuran gambar agar pas di halaman PDF
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    
-        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save("document.pdf");
+        if(result.length > 0){
+            const element = printRef.current;
+            const canvas = await html2canvas(element);
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF("p", "mm", "a4");
+        
+            // Mengatur ukuran gambar agar pas di halaman PDF
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        
+            pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+            pdf.save("document.pdf");
+        }else{
+            alert('tidak ada data yang dicetak')
+        }
     }
 
     return(
@@ -68,41 +98,91 @@ export default function DataKeputusan(){
                                 <RingLoader/>
                             </div>
                         ):(
-                        <div ref={printRef} className="flex text-center items-center justify-center mx-4 my-10">
-                            <div className="text-center">
-                                <div className="flex justify-center w-full">
-                                    <img className="w-72 mt-10" src={logocg} alt="" />
-                                </div>
-                                <h1 className="text-lg font-semibold text-gray-700 p-2">Data Keputusan</h1>
-                                <table className="w-full h-full text-lg text-left rtl:text-right text-gray-500">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                                        <tr>
-                                            <th scope="col" className="px-6 py-3">Prioritas</th>
-                                            <th scope="col" className="px-6 py-3">Alternatif</th>
-                                            <th scope="col" className="px-6 py-3">Score</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {results.map((item, index) => (
-                                            <tr key={item.id} className="odd:bg-white even:bg-gray-50">
-                                                <td className="px-6 py-4 w-1">{index + 1}</td>
-                                                <td className="px-6 py-4">{item.alternatif}</td>
-                                                <td className="px-6 py-4 space-x-2 w-1/4">{item.score}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th scope="col" className="px-6 py-3">No</th>
+                            <th scope="col" className="px-6 py-3">User</th>
+                            <th scope="col" className="px-6 py-3">Dibuat</th>
+                            <th scope="col" className="px-6 py-3">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {report.map((report, index) => (
+                            <tr key={report.id} className="odd:bg-white even:bg-gray-50">
+                                <td className="px-6 py-4 w-1">{index + 1}</td>
+                                <td className="px-6 py-4">
+                                    <h1 className="font-semibold text-gray-700">{report.nama}</h1>
+                                    <p>{report.jabatan}</p>
+                                </td>
+                                <td className="px-6 py-4 space-x-2 w-1/4">{new Date(report.created_at).toLocaleDateString('en-GB', {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric',
+                                    })}{' '}
+                                </td>
+                                <td className="px-6 py-4 space-x-2 w-1/4">
+                                <button
+                                    type="button"
+                                    onClick={() => getResult(report.id)}
+                                    className="p-4 font-medium text-blue-600 hover:underline"
+                                >
+                                    Cetak
+                                </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
                 )}
-                <button
-                    type="button"
-                    onClick={()=> handleCetak()}
-                    className="p-4 font-medium text-blue-600 hover:underline"
-                >
-                    Cetak
-                </button>
             </div>
+
+
+            { loading ? (
+                        <div className="flex items-center justify-center p-40">
+                            <RingLoader/>
+                        </div>
+                    ):(
+                    isOpen &&
+                    result.length > 0 ? (
+                    <div className="flex text-center items-center justify-center mx-4 my-10">
+                        <div ref={printRef} className="text-center">
+                            <div className="flex justify-center w-full">
+                                <img className="w-72 mt-10" src={logocg} alt="" />
+                            </div>
+                            <h1 className="text-lg font-semibold text-gray-700 p-2">Data Keputusan</h1>
+                            <table className="w-full h-full text-lg text-left rtl:text-right text-gray-500">
+                                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" className="px-6 py-3">Prioritas</th>
+                                        <th scope="col" className="px-6 py-3">Alternatif</th>
+                                        <th scope="col" className="px-6 py-3">Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {result.map((item, index) => (
+                                        <tr key={item.id} className="odd:bg-white even:bg-gray-50">
+                                            <td className="px-6 py-4 w-1">{index + 1}</td>
+                                            <td className="px-6 py-4">{item.alternatif}</td>
+                                            <td className="px-6 py-4 space-x-2 w-1/4">{item.score}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <button onClick={() => handleCetak()}>
+                            Cetak
+                        </button>
+                        <button onClick={() => toggleCetakClose()}>
+                            Batal
+                        </button>
+                    </div>
+                    ):(
+                        <div className="flex justify-center">
+                            <p>Tidak ada data</p>
+                        </div>
+                    )
+            )}
         </div>
       </>
     )

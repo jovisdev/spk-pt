@@ -104,14 +104,6 @@ export default function Kriteria() {
             window.alert('Terjadi kesalahan saat menyimpan perubahan.');
         }
     };
-    
-
-    // // Generate kode baru
-    // const generateNewCode = () => {
-    //     const lastCode = kriteria[kriteria.length - 1]?.kode || "C0";
-    //     const newNumber = parseInt(lastCode.replace("C", ""), 10) + 1;
-    //     return `C${newNumber}`;
-    // };
 
     // hapus kriteria
     const handleDelete = async (item) => {
@@ -129,8 +121,11 @@ export default function Kriteria() {
                 setLoading(false);
                 setKriteria(updatedKriteria);
             }
+
         } catch (error) {
-            console.log('Terjadi kesalahan saat menghapus data.', error);
+            alert('Kriteria memiliki subkritera, silahkan hapus subkriteria terlebih dahulu')
+        } finally {
+            setLoading(false);
         }
     };
 

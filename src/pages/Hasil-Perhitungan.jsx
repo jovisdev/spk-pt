@@ -33,12 +33,12 @@ export default function HasilPerhitungan(){
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
+            } finally{
+                setLoading(false)
             }
         };
         fetchAllData();
     }, []);
-
-    console.log(prioritas)
     
     const handleSimpan = async () => {
         setLoading(true);
