@@ -1,19 +1,17 @@
 import Infouser from "../components/info-user";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { RingLoader } from "react-spinners";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import logocg from "/src/assets/Logo Atas.png";
 
 export default function HasilPerhitungan(){
-
-    const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
 
     const [prioritas, setPrioritas] = useState([])
-    const [alternatif, setAlternatif] = useState([])
-    const [score, setScore] = useState([])
 
     // API
     // GET DATA
@@ -39,24 +37,26 @@ export default function HasilPerhitungan(){
         };
         fetchAllData();
     }, []);
-    
-    const handleSimpan = async () => {
-        setLoading(true);
-        try {
-            const postPromises = prioritas.map((item) =>
-                axios.post(import.meta.env.VITE_API_DATASIMPAN, {
-                    ...item, // Kirim setiap objek
-                })
-            );
-    
-            await Promise.all(postPromises); // Tunggu semua permintaan selesai
-            setLoading(false);
-            alert("Data berhasil disimpan");
-            navigate('/datakeputusan')
-        } catch (error) {
-            console.error("Error posting data:", error);
+
+    const printRef = useRef();
+    const handleCetak = async () => {
+
+        if(prioritas.length > 0){
+            const element = printRef.current;
+            const canvas = await html2canvas(element);
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF("p", "mm", "a4");
+        
+            // Mengatur ukuran gambar agar pas di halaman PDF
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        
+            pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+            pdf.save("document.pdf");
+        }else{
+            alert('tidak ada data yang dicetak')
         }
-    };
+    }
 
     return(
       <>
@@ -77,45 +77,51 @@ export default function HasilPerhitungan(){
                         <RingLoader/>
                     </div>
                 ):(
-                <div className="border-2 border-gray-200">
-                    <h1 className="m-2 text-gray-700 text-lg font-semibold">Nilai Akhir</h1>
-                    <div className="relative overflow-x-auto sm:rounded-lg">
-                        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                                <tr>
-                                    <th scope="col" className="px-6 py-3">Prioritas</th>
-                                    <th scope="col" className="px-6 py-3">Score</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {prioritas.length > 0 ? (
-                                prioritas.map((item) => (
-                                    <tr className="odd:bg-white even:bg-gray-50 border-b">
-                                        <td className="px-6 py-4">{item.alternatif}</td>
-                                        <td className="px-6 py-4">{item.score}</td>
+                <div>
+                <div ref={printRef} className="border-2 border-gray-200 p-4">
+                    <div className="text-center">
+                        <div className="flex justify-center w-full">
+                            <img className="w-72 mt-10" src={logocg} alt="" />
+                        </div>
+                        <h1 className="m-2 text-gray-700 text-lg font-semibold">Nilai Akhir</h1>
+                        <div className="relative overflow-x-auto sm:rounded-lg">
+                            <table className="w-full text-lg text-center text-gray-700">
+                                <thead className="text-lg text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" className="px-6 py-3">Prioritas</th>
+                                        <th scope="col" className="px-6 py-3">Score</th>
                                     </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={prioritas.length + 2} className="px-6 py-4 text-center">
-                                        Tidak ada data.
-                                    </td>
-                                </tr>
-                            )}
+                                </thead>
+                                <tbody>
+                                {prioritas.length > 0 ? (
+                                    prioritas.map((item) => (
+                                        <tr className="odd:bg-white even:bg-gray-50 border-b">
+                                            <td className="px-6 py-4">{item.alternatif}</td>
+                                            <td className="px-6 py-4">{item.score}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan={prioritas.length + 2} className="px-6 py-4 text-center">
+                                            Tidak ada data.
+                                        </td>
+                                    </tr>
+                                )}
 
-                            </tbody>
-                        </table>
-
-                        <div className="flex justify-end m-2">
-                            <button
-                                type="button"
-                                onClick={handleSimpan}
-                                className="bg-gray-800 text-white text-sm p-2 rounded transition hover:bg-gray-700"
-                            >
-                                Simpan Hasil
-                            </button>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+                </div>
+                <div className="flex justify-end m-2">
+                    <button
+                        type="button"
+                        onClick={handleCetak}
+                        className="bg-gray-800 text-white text-sm p-2 rounded transition hover:bg-gray-700"
+                    >
+                    Cetak
+                    </button>
+                </div>
                 </div>
                 )}
             </div>
