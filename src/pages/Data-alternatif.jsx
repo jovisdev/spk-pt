@@ -48,6 +48,12 @@ export default function Alternatif() {
     const [kelamin, setKelamin] = useState('');
     const [alamat, setAlamat] = useState('');
     const [usia, setUsia] = useState('');
+    const [error, setError] = useState(false)
+
+    const validateForm = () => {
+        // Validasi: Semua state harus terisi dan valid
+        return kode.trim() && nama.trim() && kelamin && alamat.trim() && usia.trim();
+    };
 
     const handleAdd = async (e) => {
         e.preventDefault();
@@ -59,6 +65,12 @@ export default function Alternatif() {
             alamat,
             usia : parseInt(usia),
         };
+
+        if (!validateForm()) {
+            setError(true);
+            return;
+        }
+        setError(false);
     
         try {
             const response = await axios.post(import.meta.env.VITE_API_ADDALTERNATIF, data);
@@ -78,8 +90,16 @@ export default function Alternatif() {
         }
     };
 
+    const validateFormUbah = () => {
+        return (
+            selectedItem.nama?.trim() &&
+            selectedItem.kelamin?.trim() &&
+            selectedItem.alamat?.trim() &&
+            String(selectedItem.usia)?.trim()
+        );
+    };
+    
     const handleUpdate = async () => {
-        setLoading(true);
         try {
             const updatedItem = { ...selectedItem };
     
@@ -187,13 +207,6 @@ export default function Alternatif() {
                             )}
                             </tbody>
                         </table>
-                        <div className="flex justify-end m-2">
-                            <button
-                                className="bg-gray-800 text-white text-sm p-2 rounded transition hover:bg-gray-700"
-                            >
-                                Oke
-                            </button>
-                        </div>
                     </div>
                             )}
                 </div>
@@ -234,8 +247,9 @@ export default function Alternatif() {
                                     type="text"
                                     name="nama"
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
-                                    placeholder="Masukkan Kriteria"
+                                    placeholder="Masukkan Nama Lengkap Calon"
                                     onChange={(e) => setNama(e.target.value)}
+                                    required
                                 />
                             </div>
 
@@ -247,6 +261,7 @@ export default function Alternatif() {
                                     name="telepon"
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
                                     onChange={(e) => setKelamin(e.target.value)}
+                                    required
                                 >
                                     <option disabled selected value> -- select an option -- </option>
                                     <option value="Laki Laki">Laki Laki</option>
@@ -264,6 +279,7 @@ export default function Alternatif() {
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
                                     placeholder="Masukkan alamat"
                                     onChange={(e) => setAlamat(e.target.value)}
+                                    required
                                 />
                             </div>
 
@@ -276,8 +292,11 @@ export default function Alternatif() {
                                     onChange={(e) => setUsia(e.target.value)}
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
                                     placeholder="Masukkan usia"
+                                    required
                                 />
                             </div>
+
+                            <p className="text-red-500 text-sm">* Isi semua data sebelum menambah</p>
 
                             <div className="flex justify-end space-x-4">
                                 <button
@@ -290,7 +309,12 @@ export default function Alternatif() {
                                 <button
                                     onClick={handleAdd}
                                     type="button"
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                                    disabled={!validateForm()}
+                                    className={`px-4 py-2 rounded-md text-white ${
+                                        validateForm()
+                                            ? "bg-blue-600 hover:bg-blue-700"
+                                            : "bg-gray-300 cursor-not-allowed"
+                                    }`}
                                 >
                                     Tambah
                                 </button>
@@ -335,11 +359,12 @@ export default function Alternatif() {
                                     type="text"
                                     name="nama"
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
-                                    placeholder="Masukkan Kriteria"
+                                    placeholder="Masukkan Nama Lengkap Calon"
                                     value={selectedItem.nama}
                                     onChange={(e) =>
                                         setSelectedItem({ ...selectedItem, nama: e.target.value })
                                     }
+                                    
                                 />
                             </div>
 
@@ -351,9 +376,10 @@ export default function Alternatif() {
                                     name="telepon"
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
                                     value={selectedItem.kelamin}
-                                        onChange={(e) =>
-                                            setSelectedItem({ ...selectedItem, kelamin: e.target.value })
-                                        }
+                                    onChange={(e) =>
+                                        setSelectedItem({ ...selectedItem, kelamin: e.target.value })
+                                    }
+                                    
                                 >
                                     <option value="Laki Laki">Laki Laki</option>
                                     <option value="Perempuan">Perempuan</option>
@@ -373,6 +399,7 @@ export default function Alternatif() {
                                     onChange={(e) =>
                                         setSelectedItem({ ...selectedItem, alamat: e.target.value })
                                     }
+                                    
                                 />
                             </div>
 
@@ -387,7 +414,7 @@ export default function Alternatif() {
                                         setSelectedItem({ ...selectedItem, usia: e.target.value })
                                     }
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
-                                    placeholder="0811xxxxxxxx"
+                                    placeholder="Masukan Usia"
                                 />
                             </div>
                             
@@ -403,7 +430,12 @@ export default function Alternatif() {
                                 <button
                                     onClick={handleUpdate}
                                     type="button"
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                                    disabled={!validateFormUbah()}
+                                    className={`px-4 py-2 rounded-md text-white ${
+                                        validateFormUbah()
+                                            ? "bg-blue-600 hover:bg-blue-700"
+                                            : "bg-gray-300 cursor-not-allowed"
+                                    }`}
                                 >
                                     Ubah
                                 </button>

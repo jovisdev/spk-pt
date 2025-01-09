@@ -41,16 +41,34 @@ export default function DataKeputusan(){
         fetchData();
     }, []);
 
-    const getResult = async (rpt) => {
+    const getResult = async (id) => {
         setLoading(true);
         try {
-            const response = await axios.get(`${import.meta.env.VITE_API_DATASCORE}/${rpt.id}`);
+            const response = await axios.get(`${import.meta.env.VITE_API_DATASCORE}/${id}`);
             setResult(response.data);
             setLoading(false);
-            toggleCetakOpen(true);
+            toggleCetakOpen()
         } catch (error) {
             console.error("Error fetching data:", error);
             setLoading(false);
+        }
+    };
+
+    // reset hasil perhitungan
+    const handleDelete = async (result) => {
+        setLoading(true);
+        try {
+            const response = await axios.delete(`${import.meta.env.VITE_API_RESETRESULT}/${result}`);
+    
+            if (response.status === 200) {
+                window.alert(response.data.message);
+                setLoading(false);
+                window.location.reload();
+            }
+        } catch (error) {
+            console.log('Terjadi kesalahan saat menghapus data.', error);
+        } finally{
+            setLoading(false)
         }
     };
 
@@ -122,13 +140,20 @@ export default function DataKeputusan(){
                                     })}{' '}
                                 </td>
                                 <td className="px-6 py-4 space-x-2 w-1/4">
-                                <button
-                                    type="button"
-                                    onClick={() => getResult(report.id)}
-                                    className="p-4 font-medium text-blue-600 hover:underline"
-                                >
-                                    Cetak
-                                </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => getResult(report.id)}
+                                        className="font-medium text-blue-600 hover:underline"
+                                    >
+                                        Cetak
+                                    </button>
+                                    <button 
+                                        type="button" 
+                                        onClick={()=> handleDelete(report.id)} 
+                                        class="font-medium text-red-600 hover:underline"
+                                    >
+                                        Hapus
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -138,51 +163,59 @@ export default function DataKeputusan(){
             </div>
 
 
-            { loading ? (
-                        <div className="flex items-center justify-center p-40">
-                            <RingLoader/>
-                        </div>
-                    ):(
-                    isOpen &&
-                    result.length > 0 ? (
-                    <div className="flex text-center items-center justify-center mx-4 my-10">
-                        <div ref={printRef} className="text-center">
-                            <div className="flex justify-center w-full">
-                                <img className="w-72 mt-10" src={logocg} alt="" />
+            <div>
+                <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg">
+                { loading ? (
+                            <div className="flex items-center justify-center p-40">
+                                <RingLoader/>
                             </div>
-                            <h1 className="text-lg font-semibold text-gray-700 p-2">Data Keputusan</h1>
-                            <table className="w-full h-full text-lg text-left rtl:text-right text-gray-500">
-                                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                                    <tr>
-                                        <th scope="col" className="px-6 py-3">Prioritas</th>
-                                        <th scope="col" className="px-6 py-3">Alternatif</th>
-                                        <th scope="col" className="px-6 py-3">Score</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {result.map((item, index) => (
-                                        <tr key={item.id} className="odd:bg-white even:bg-gray-50">
-                                            <td className="px-6 py-4 w-1">{index + 1}</td>
-                                            <td className="px-6 py-4">{item.alternatif}</td>
-                                            <td className="px-6 py-4 space-x-2 w-1/4">{item.score}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                        ):(
+                        isOpen &&
+                        result.length > 0 ? (
+                        <div>
+                            <div className="flex text-center items-center justify-center mx-4 my-10">
+                                <div ref={printRef} className="text-center">
+                                    <div className="flex justify-center w-full">
+                                        <img className="w-72 mt-10" src={logocg} alt="" />
+                                    </div>
+                                    <h1 className="text-lg font-semibold text-gray-700 p-2">Data Keputusan</h1>
+                                    <table className="w-full h-full text-lg text-left rtl:text-right text-gray-500">
+                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                            <tr>
+                                                <th scope="col" className="px-6 py-3">Prioritas</th>
+                                                <th scope="col" className="px-6 py-3">Alternatif</th>
+                                                <th scope="col" className="px-6 py-3">Score</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {result.map((item, index) => (
+                                                <tr key={item.id} className="odd:bg-white even:bg-gray-50">
+                                                    <td className="px-6 py-4 w-1">{index + 1}</td>
+                                                    <td className="px-6 py-4">{item.alternatif}</td>
+                                                    <td className="px-6 py-4 space-x-2 w-1/4">{item.score}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div className="space-x-2">
+                                <button className="text-blue-600" onClick={() => handleCetak()}>
+                                    Cetak
+                                </button>
+                                <button className="text-red-600" onClick={() => toggleCetakClose()}>
+                                    Batal
+                                </button>
+                            </div>
                         </div>
-                        <button onClick={() => handleCetak()}>
-                            Cetak
-                        </button>
-                        <button onClick={() => toggleCetakClose()}>
-                            Batal
-                        </button>
-                    </div>
-                    ):(
-                        <div className="flex justify-center">
-                            <p>Tidak ada data</p>
-                        </div>
-                    )
-            )}
+                        ):(
+                            <div className="flex justify-center">
+                                <p>Tidak ada data</p>
+                            </div>
+                        )
+                )}
+                </div>
+            </div>
         </div>
       </>
     )

@@ -93,7 +93,7 @@ export default function PerhitunganMetode(){
                     </div>
                 ):(
                 <div className="border-2 border-gray-200">
-                    <h1 className="m-2 text-gray-700 text-lg font-semibold">Konversi Data Awal</h1>
+                    <h1 className="m-2 text-gray-700 text-lg font-semibold">Matriks Keputusan Awal</h1>
                     <div className="relative overflow-x-auto sm:rounded-lg">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">

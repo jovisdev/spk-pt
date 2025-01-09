@@ -35,7 +35,7 @@ export default function PenilaianAlternatif() {
     }, []);
 
     const handleInputChange = (kriteriaId, value) => {
-        setPenilaian((prev) => ({ ...prev, [kriteriaId]: value }));
+        setPenilaian((prev) => ({ ...prev, [kriteriaId]: value}));
     };
 
     const handleAdd = async (e) => {
@@ -44,7 +44,7 @@ export default function PenilaianAlternatif() {
         const data = Object.entries(penilaian).map(([kriteriaId, nilai]) => ({
             alternatif_id : parseInt(alternatif_id),
             kriteria_id: parseInt(kriteriaId),
-            nilai,
+            nilai
         }));
         try {
             await axios.post(import.meta.env.VITE_API_ADDPENILAIAN, data);
@@ -55,7 +55,7 @@ export default function PenilaianAlternatif() {
             console.error("Terjadi kesalahan:", error);
         }
     };
-
+    
     return (
         <>
         {loading ? (

@@ -20,14 +20,16 @@ export default function PenilaianReview(){
         const fetchAllData = async () => {
             setLoading(true);
             try {
-                const [kriteriaRes, alternatifRes, penilaianRes] = await Promise.all([
+                const [kriteriaRes, alternatifRes, subKriteriares, penilaianRes] = await Promise.all([
                     axios.get(import.meta.env.VITE_API_KRITERIA),
                     axios.get(import.meta.env.VITE_API_ALTERNATIF),
+                    axios.get(import.meta.env.VITE_API_SUBKRITERIA),
                     axios.get(import.meta.env.VITE_API_PENILAIANAWAL),
                 ]);
     
                 const kriteria = kriteriaRes.data;
                 const alternatif = alternatifRes.data;
+                const subKriteria = subKriteriares.data;
                 const penilaian = penilaianRes.data;
     
                 // Gabungkan penilaian ke alternatif
@@ -51,6 +53,27 @@ export default function PenilaianReview(){
         };
         fetchAllData();
     }, []);
+
+    // reset penilaian
+    const handleDelete = async () => {
+        setLoading(true);
+        try {
+            // Kirim permintaan DELETE untuk item yang dipilih
+            const response = await axios.delete(import.meta.env.VITE_API_RESETPENILAIAN);
+    
+            // Periksa status dari respons
+            if (response.status === 200) {
+                window.alert(response.data.message);
+                setLoading(false);
+                navigate('/penilaian')
+            }
+
+        } catch (error) {
+            alert('Kriteria memiliki subkritera, silahkan hapus subkriteria terlebih dahulu')
+        } finally {
+            setLoading(false);
+        }
+    };
     
     return(
         <>
@@ -114,12 +137,18 @@ export default function PenilaianReview(){
                             </tbody>
                         </table>
 
-                        <div className="flex justify-end m-2">
+                        <div className="flex space-x-2 justify-end m-2">
                             <button
                                 onClick={() => navigate("/penilaian")}
                                 className="bg-gray-800 text-white text-sm p-2 rounded transition hover:bg-gray-700"
                             >
                                 kembali
+                            </button>
+                            <button
+                                onClick={handleDelete}
+                                className="bg-red-600 text-white text-sm p-2 rounded transition hover:bg-red-400"
+                            >
+                                Reset
                             </button>
                         </div>
                     </div>

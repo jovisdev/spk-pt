@@ -22,7 +22,7 @@ export default function HasilPerhitungan(){
         const fetchAllData = async () => {
             setLoading(true);
             try {
-                const response = await axios(import.meta.env.VITE_API_DATAPREPARE)
+                const response = await axios.get(import.meta.env.VITE_API_DATAPREPARE)
                 const dataPriority = response.data.priority
                 const dataAlternatif = dataPriority.map((item) => ({alternatif: item.alternatif}))
                 const dataScore = dataPriority.map((item) => ({score: item.score}))
