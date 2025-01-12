@@ -19,15 +19,13 @@ import PenilaianReview from "./pages/Penilaian-review"
 import PerhitunganMetode from "./pages/Perhitungan-Metode"
 import HasilPerhitungan from "./pages/Hasil-Perhitungan"
 import UserManagement from "./pages/User-management"
-import DataKeputusan from "./pages/Data-keputusan"
-// import Perhitungan from "./pages/Perhitungan"
 
 function App() {
 
   return (
     <>
     <Provider store={store}>
-      <PersistGate  loading={null} persistor={persistor}>
+      <PersistGate loading={null} persistor={persistor}>
         <Router>
           <Sidenav/>
           <Routes>
@@ -94,12 +92,6 @@ function App() {
                 <HasilPerhitungan />
               </PrivateRoute>
             }/>
-
-            <Route path="/datakeputusan" element={
-              <PrivateRoute requiredRole={["Super Admin" , "Koor. Personal Trainer", "Manajer"]}>
-                <DataKeputusan />
-              </PrivateRoute>
-            }/>   
 
             <Route path="/user" element={
               <PrivateRoute requiredRole="Super Admin">
