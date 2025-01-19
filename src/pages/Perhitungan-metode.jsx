@@ -53,24 +53,11 @@ export default function PerhitunganMetode(){
         fetchAllData();
     }, []);
 
-    const userId = useSelector((state) => state.id)
-    const jumlah_alternatif = alternatif.length
     const handleHitung = async() => {
         setLoading(true)
-
-        try {
-            await axios.post(import.meta.env.VITE_API_ADDREPORT,{
-                userId,
-                jumlah_alternatif
-            })
-            alert('Memulai perhitungan')
-            setLoading(false)
-            navigate("/perhitungan/metode/hasil")
-        } catch (error) {
-            console.error("Error hitung data:", error)
-        } finally{
-            setLoading(false)
-        }
+        alert('Memulai perhitungan')
+        setLoading(false)
+        navigate("/perhitungan/metode/hasil")
     }
 
     return(

@@ -49,7 +49,7 @@ export default function Home(){
                             Sistem Rekrutmen Personal Trainer
                         </h1>
                         <p className="mt-6 text-lg leading-8 text-gray-600">
-                            Aplikasi berbasis web yang dapat membantu management dalam memilih calon personal trainer terbaik yang akan bergabung di perusahaan.
+                            Aplikasi berbasis web yang dapat membantu manajemen dalam memilih calon personal trainer terbaik yang akan bergabung di perusahaan.
                         </p>
                         <div className="mt-10 flex items-center gap-x-6">
                             <button
