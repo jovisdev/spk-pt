@@ -48,13 +48,13 @@ export default function Dashboard(){
 
             <div class="flex items-center mb-4 rounded bg-gray-50 p-4">
                 <div className="p-2">
-                <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="16" height="32" enable-background="new 0 0 16 32" id="info">
-                    <path d="M2 16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H0v4h16v-4h-1.992c-1.102 0-2-.895-2-2L12 12H0v4h2z" fill="#4e4e50"></path>
-                    <circle cx="8" cy="4" r="4" fill="#4e4e50"></circle>
-                    </svg>
+                <svg className="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" id="Dashboard">
+                  <path fill="none" d="M0 0h48v48H0z"></path>
+                  <path d="M6 26h16V6H6v20zm0 16h16V30H6v12zm20 0h16V22H26v20zm0-36v12h16V6H26z" fill="#757575" class="color000000 svgShape"></path>
+                </svg>
                 </div>
                 <div className="p-2">
-                    <p className="text-gray-700">Sistem yang dikembangkan hanya digunakan untuk membantu manajemen dalam proses pengambilan keputusan berdasarkan kriteria yang telah ditentukan, tanpa melibatkan proses rekrutmen penuh atau pelatihan personal trainer.</p>
+                    <h1 className="text-3xl font-semibold text-gray-700">Dashboard</h1>
                 </div>
             </div>
 

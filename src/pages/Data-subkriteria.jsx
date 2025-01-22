@@ -21,8 +21,8 @@ export default function SubKriteria() {
     const [loading, setLoading] = useState(false);
 
     //  / Toggle form/modal ubah
-    const toggleFormUbah = (skriteria) => {
-        setSelectedItem(skriteria);
+    const toggleFormUbah = (skriteria, kriteria) => {
+        setSelectedItem({...skriteria, kriteria});
         setValue(skriteria.bobot || ""); // Isi nilai input dengan bobot yang ada
         setIsOpenUbah(true);
     };
@@ -152,13 +152,25 @@ export default function SubKriteria() {
 
                     <div className="flex items-center mb-4 rounded bg-gray-50 p-4">
                         <div className="p-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" width="16" height="32" enableBackground="new 0 0 16 32" id="info">
-                                <path d="M2 16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H0v4h16v-4h-1.992c-1.102 0-2-.895-2-2L12 12H0v4h2z" fill="#4e4e50"></path>
-                                <circle cx="8" cy="4" r="4" fill="#4e4e50"></circle>
-                            </svg>
+                        <svg className="w-7 h-7" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 512 512" id="SalesClipboard">
+                            <path fill="#eeeeee" fill-rule="evenodd" d="M366.669 64.069c11.878 0 21.565 9.687 21.565 21.565v396.801c0 11.877-9.688 21.565-21.565 21.565H34.565C22.688 504 13 494.312 13 482.435V85.634c0-11.878 9.687-21.565 21.565-21.565h332.104z" clip-rule="evenodd" class="coloreceff1 svgShape"></path>
+                            <path fill="#e3e3e3" fill-rule="evenodd" d="M366.669 64.069c11.878 0 21.565 9.687 21.565 21.565v396.801c0 11.877-9.687 21.565-21.565 21.565H200.617V64.069h166.052z" clip-rule="evenodd" class="colore1e4e6 svgShape"></path>
+                            <path fill="#757575" fill-rule="evenodd" d="M127.591 36.035h37.389C168.859 19.95 183.342 8 200.617 8s31.758 11.95 35.637 28.035h37.389c5.508 0 10 4.492 10 10v36.07c0 5.507-4.492 10-10 10H127.591c-5.508 0-10-4.492-10-10v-36.07c0-5.508 4.492-10 10-10z" clip-rule="evenodd" class="color685e68 svgShape"></path>
+                            <path fill="#4e4e4e" fill-rule="evenodd" d="M200.617 8c17.275 0 31.758 11.95 35.637 28.035h37.389c5.508 0 10 4.492 10 10v36.07c0 5.508-4.492 10-10 10h-73.026V8z" clip-rule="evenodd" class="color544854 svgShape"></path>
+                            <path fill="#a1a1a1" fill-rule="evenodd" d="M189.213 176.234a8 8 0 0 1 0-16h106a8 8 0 0 1 0 16h-106zm0 266.591a8 8 0 0 1 0-16h69a8 8 0 0 1 0 16h-69zm0-33.5a8 8 0 0 1 0-16h106a8 8 0 0 1 0 16h-106zm0-83.045a8 8 0 0 1 0-16h69a8 8 0 0 1 0 16h-69zm0-33.501a8 8 0 0 1 0-16h106a8 8 0 0 1 0 16h-106zm0-83.045a8 8 0 0 1 0-16h69a8 8 0 0 1 0 16h-69z" clip-rule="evenodd" class="colora79ba7 svgShape"></path>
+                            <g fill-rule="evenodd" clip-rule="evenodd" fill="#000000" class="color000000 svgShape">
+                            <path fill="#bababa" d="M77.06 147.483h59.473c4.27 0 7.764 3.493 7.764 7.764v59.473c0 4.27-3.493 7.764-7.764 7.764H77.06c-4.27 0-7.764-3.493-7.764-7.764v-59.473c.001-4.27 3.494-7.764 7.764-7.764zm0 233.092h59.473c4.27 0 7.764 3.493 7.764 7.764v59.473c0 4.27-3.493 7.764-7.764 7.764H77.06c-4.27 0-7.764-3.493-7.764-7.764v-59.473c.001-4.27 3.494-7.764 7.764-7.764zm0-116.546h59.473c4.27 0 7.764 3.493 7.764 7.763v59.473c0 4.27-3.493 7.764-7.764 7.764H77.06c-4.27 0-7.764-3.493-7.764-7.764v-59.473c.001-4.269 3.494-7.763 7.764-7.763z" class="colorf1ba84 svgShape"></path>
+                            <path fill="#989898" d="M136.533 222.484c4.27 0 7.764-3.493 7.764-7.764v-59.473c0-4.27-3.493-7.764-7.764-7.764h-10.875c4.27 0 7.764 3.493 7.764 7.764v59.473c0 4.27-3.493 7.764-7.764 7.764h10.875zm0 158.091h-10.875c4.27 0 7.764 3.493 7.764 7.764v59.473c0 4.27-3.493 7.764-7.764 7.764h10.875c4.27 0 7.764-3.493 7.764-7.764v-59.473c0-4.27-3.494-7.764-7.764-7.764zm-10.875-41.545h10.875c4.27 0 7.764-3.493 7.764-7.764v-59.473c0-4.27-3.493-7.763-7.764-7.763h-10.875c4.27 0 7.764 3.493 7.764 7.763v59.473c-.001 4.27-3.494 7.764-7.764 7.764zm-10.862 41.545v17.224a8 8 0 0 1-16 0v-17.224h16zm0-116.546v17.224a8 8 0 0 1-16 0v-17.224h16zm0-116.546v17.224a8 8 0 0 1-16 0v-17.224h16z" class="colorde9252 svgShape"></path>
+                            </g>
+                            <g fill-rule="evenodd" clip-rule="evenodd" fill="#000000" class="color000000 svgShape">
+                            <circle cx="411.499" cy="342.409" r="87.5" fill="#b1b1b1" class="colorfe646f svgShape"></circle>
+                            <path fill="#a2a2a2" d="M411.499 254.909c48.325 0 87.5 39.175 87.5 87.5s-39.175 87.5-87.5 87.5v-175z" class="colorfd4755 svgShape"></path>
+                            <path fill="#eeeeee" d="M437.71 292.64a7.971 7.971 0 0 1 12.938 9.312l-65.302 90.897a7.971 7.971 0 0 1-12.938-9.312l65.302-90.897zm-.267 65.339c-8.563 0-15.504 6.941-15.504 15.504 0 8.563 6.941 15.504 15.504 15.504 8.563 0 15.504-6.941 15.504-15.504 0-8.563-6.941-15.504-15.504-15.504zm-51.887-62.147c-8.563 0-15.504 6.941-15.504 15.504 0 8.563 6.941 15.504 15.504 15.504 8.563 0 15.504-6.941 15.504-15.504 0-8.563-6.94-15.504-15.504-15.504z" class="coloreceff1 svgShape"></path>
+                            </g>
+                        </svg>
                         </div>
                         <div className="p-2">
-                            <p className="text-gray-700">Sistem yang dikembangkan hanya digunakan untuk membantu manajemen dalam proses pengambilan keputusan berdasarkan kriteria yang telah ditentukan, tanpa melibatkan proses rekrutmen penuh atau pelatihan personal trainer.</p>
+                            <h1 className="text-3xl font-semibold text-gray-700">Data Sub Kriteria</h1>
                         </div>
                     </div>
 
@@ -208,7 +220,7 @@ export default function SubKriteria() {
                                                         <td className="px-6 py-4">{skriteria.bobot}</td>
                                                         <td className="px-6 py-4 space-x-2">
                                                             <button
-                                                                onClick={() => toggleFormUbah(skriteria)}
+                                                                onClick={() => toggleFormUbah(skriteria, kriteria)}
                                                                 className="font-medium text-blue-600 hover:underline"
                                                             >
                                                                 Ubah
@@ -309,7 +321,7 @@ export default function SubKriteria() {
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white rounded-lg w-full max-w-md mx-4 sm:mx-auto p-6 space-y-6 shadow-lg">
                         <div className="flex justify-between items-center">
-                            <h2 className="text-xl font-semibold text-gray-700">Ubah Sub Kriteria</h2>
+                            <h2 className="text-xl font-semibold text-gray-700">Ubah Sub Kriteria {selectedItem.kriteria.kriteria}</h2>
                             <button
                                 className="text-gray-500 hover:text-gray-700"
                                 onClick={closeModal}

@@ -7,7 +7,7 @@ export default function Home(){
 
     return(
         <>
-            <div id='linkedin' className="relative isolate overflow-hidden bg-white">
+            <div className="relative isolate overflow-hidden bg-white">
                 <svg
                     className="absolute inset-0 -z-10 h-full w-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
                     aria-hidden="true"
@@ -26,7 +26,7 @@ export default function Home(){
                 </defs>
                 <rect width="100%" height="100%" strokeWidth={0} fill="url(#0787a7c5-978c-4f66-83c7-11c213f99cb7)" />
                 </svg>
-                <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-12">
+                <div className="mx-auto h-screen px-6 pb-24 pt-10 sm:pb-32 lg:flex justify-center items-center lg:px-8 lg:py-12">
                     <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0">
                         <img
                             className="h-11 animate-ping absolute"

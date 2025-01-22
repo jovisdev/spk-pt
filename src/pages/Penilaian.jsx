@@ -68,7 +68,7 @@ export default function PenilaianAlternatif() {
                 <Infouser />
                 <div className="mb-4 p-4 bg-gray-50 rounded">
                     <p className="text-gray-700">
-                    Penilaian dilakukan secara jujur dan berintegritas tanpa melihat subjektifitas
+                    Mohon beri penilaian alternatif secara objektif dan jujur.
                     </p>
                 </div>
                 <h1 className="text-xl font-semibold text-gray-700">

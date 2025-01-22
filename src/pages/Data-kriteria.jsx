@@ -5,13 +5,11 @@ import axios from "axios";
 import { RingLoader } from "react-spinners";
 
 export default function Kriteria() {
-    const navigate = useNavigate()
 
     // State untuk data kriteria
     const [kriteria, setKriteria] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
     const [value, setValue] = useState("");
-    const [error, setError] = useState("");
     const [isOpenUbah, setIsOpenUbah] = useState(false);
     const [isOpenTambah, setIsOpenTambah] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -73,18 +71,6 @@ export default function Kriteria() {
         }
     };
 
-    // Hitung total bobot
-    const totalBobot = kriteria.reduce((sum, item) => sum + parseFloat(item.bobot || 0), 0).toFixed(2);
-
-    // Validasi jika total bobot lebih dari 1
-    useEffect(() => {
-        if (totalBobot > 1) {
-            setError("Total bobot tidak boleh lebih dari 1.");
-        } else {
-            setError("");
-        }
-    }, [totalBobot]);
-
     // Toggle form/modal ubah
     const toggleFormUbah = (item) => {
         setSelectedItem(item);
@@ -104,14 +90,6 @@ export default function Kriteria() {
     // Input handler untuk bobot
     const handleInputWeight = (e) => {
         const inputValue = e.target.value;
-
-        // Validasi agar nilai input <= 1
-        if (parseFloat(inputValue) + totalBobot - parseFloat(selectedItem?.bobot || 0) > 1) {
-            setError("Total bobot tidak boleh lebih dari 1.");
-            return;
-        } else {
-            setError("");
-        }
 
         setValue(inputValue);
         setSelectedItem({ ...selectedItem, bobot: inputValue });
@@ -186,13 +164,20 @@ export default function Kriteria() {
 
                     <div className="flex items-center mb-4 rounded bg-gray-50 p-4">
                         <div className="p-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" width="16" height="32" enableBackground="new 0 0 16 32" id="info">
-                                <path d="M2 16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H0v4h16v-4h-1.992c-1.102 0-2-.895-2-2L12 12H0v4h2z" fill="#4e4e50"></path>
-                                <circle cx="8" cy="4" r="4" fill="#4e4e50"></circle>
+                            <svg className="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" id="Checklist">
+                                <rect width="34" height="40" x="7" y="5" fill="#7e7e7e" rx="5" class="color13e4ea svgShape"></rect>
+                                <rect width="26" height="32" x="11" y="9" fill="#f7f7f7" rx="2" class="colorf9f5f5 svgShape"></rect>
+                                <path fill="#7e7e7e" d="M32 34H25a1 1 0 010-2h7a1 1 0 010 2zM30 30H25a1 1 0 010-2h5a1 1 0 010 2zM32 23H25a1 1 0 010-2h7a1 1 0 010 2zM30 19H25a1 1 0 010-2h5a1 1 0 010 2z" class="color13e4ea svgShape"></path>
+                                <path fill="#d4d4d4" d="M30.349,3h-12.7a3,3,0,0,0-2.884,3.824l.857,3A3.014,3.014,0,0,0,18.509,12H29.491a3.014,3.014,0,0,0,2.885-2.176l.857-3A3,3,0,0,0,30.349,3Z" class="coloraff9f7 svgShape"></path>
+                                <rect width="6" height="6" x="16" y="17" fill="#7e7e7e" rx="1.714" class="color13e4ea svgShape"></rect>
+                                <rect width="6" height="6" x="16" y="28" fill="#7e7e7e" rx="1.714" class="color13e4ea svgShape"></rect>
+                                <path fill="#757575" d="M36,45H12a5.006,5.006,0,0,1-5-5V10a5.006,5.006,0,0,1,5-5h3.65a1,1,0,0,1,0,2H12a3,3,0,0,0-3,3V40a3,3,0,0,0,3,3H36a3,3,0,0,0,3-3V10a3,3,0,0,0-3-3H32.35a1,1,0,0,1,0-2H36a5.006,5.006,0,0,1,5,5V40A5.006,5.006,0,0,1,36,45Z" class="color007da1 svgShape"></path>
+                                <path fill="#757575" d="M35,41H13a2,2,0,0,1-2-2V11a2,2,0,0,1,2-2h3.79a1,1,0,0,1,0,2H13V39H35V11H31.22a1,1,0,0,1,0-2H35a2,2,0,0,1,2,2V39A2,2,0,0,1,35,41Z" class="color007da1 svgShape"></path>
+                                <path fill="#757575" d="M29.491,12H18.509a3.014,3.014,0,0,1-2.885-2.175l-.857-3A3,3,0,0,1,17.651,3h12.7a3,3,0,0,1,2.884,3.824l-.857,3A3.014,3.014,0,0,1,29.491,12ZM17.651,5a1,1,0,0,0-.961,1.275l.857,3a1,1,0,0,0,.962.725H29.491a1,1,0,0,0,.961-.725l.858-3A1,1,0,0,0,30.349,5Z" class="color007da1 svgShape"></path>
                             </svg>
                         </div>
                         <div className="p-2">
-                            <p className="text-gray-700">Sistem yang dikembangkan hanya digunakan untuk membantu manajemen dalam proses pengambilan keputusan berdasarkan kriteria yang telah ditentukan, tanpa melibatkan proses rekrutmen penuh atau pelatihan personal trainer.</p>
+                            <h1 className="text-3xl font-semibold text-gray-700">Data Kriteria</h1>
                         </div>
                     </div>
 
@@ -244,30 +229,7 @@ export default function Kriteria() {
                                     </tr>
                                 ))}
                             </tbody>
-                            <tfoot>
-                                <tr className="bg-gray-100 border-t">
-                                    <td colSpan="4" className="px-6 py-4 font-semibold text-gray-700">
-                                        Total Bobot
-                                    </td>
-                                    <td colSpan="2" className="px-6 py-4 font-semibold text-gray-900">
-                                        {totalBobot}
-                                    </td>
-                                </tr>
-                            </tfoot>
                         </table>
-                        {error && <p className="text-red-600 mt-2">{error}</p>}
-                        <div className="flex justify-end m-2">
-                            <button
-                                type="button"
-                                onClick={()=>navigate('/subkriteria')}
-                                className={`bg-gray-800 text-white text-sm p-2 rounded transition ${
-                                    totalBobot > 1 ? "bg-gray-400 cursor-not-allowed" : "hover:bg-gray-700"
-                                }`}
-                                disabled={totalBobot > 1}
-                            >
-                                Lanjut
-                            </button>
-                        </div>
                     </div>
                     )}
                 </div>
@@ -337,16 +299,10 @@ export default function Kriteria() {
                                 <input
                                     type="number"
                                     step="0.1"
-                                    min="0"
-                                    max="1"
                                     value={selectedItem.bobot}
                                     onChange={handleInputWeight}
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
-                                    placeholder="Masukkan bobot (0.0 - 1.0)"
                                 />
-                                {error && (
-                                    <p className="text-red-600 text-sm">Bobot maksimal 1.</p>
-                                )}
                             </div>
                             <div>
                                 <label className="block text-gray-700 font-medium mb-1">
@@ -458,15 +414,9 @@ export default function Kriteria() {
                                     onChange={(e) => setBobot(e.target.value)}
                                     type="number"
                                     step="0.1"
-                                    min="0"
-                                    max="1"
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
-                                    placeholder="Masukkan bobot (0.0 - 1.0)"
                                     required
                                 />
-                                {error && (
-                                    <p className="text-red-600 text-sm">Bobot maksimal 1.</p>
-                                )}
                             </div>
                             <div>
                                 <label className="block text-gray-700 font-medium mb-1">

@@ -26,7 +26,7 @@ export default function Sidenav() {
   }
 
   // Fungsi untuk mengecek apakah path saat ini sesuai dengan menu
-  const isActive = (path) => location.pathname === path;
+  const isActive = (...paths) => paths.some((path) => window.location.pathname.startsWith(path));
 
   // logout
   const dispatch = useDispatch();

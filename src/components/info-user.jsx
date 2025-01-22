@@ -14,9 +14,7 @@ export default function Infouser(){
                     <p className="text-gray-500 italic">{role}</p>
                 </div>
                 <div>
-                    <button onClick={()=>navigate('/profile')}>
-                        <img src={logouser} alt="prf" />
-                    </button>
+                    <img src={logouser} alt="prf" />
                 </div>
             </div>
         </>
