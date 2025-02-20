@@ -180,6 +180,7 @@ export default function SubKriteria() {
                             <RingLoader/>
                         </div>
                     ):(
+                    itemsKriteria.filter((kriteria) => kriteria.tipe !== "Kuantitatif").length > 0 ? (
                     itemsKriteria
                     .filter((kriteria) => kriteria.tipe !== "Kuantitatif")
                     .map((kriteria) => {
@@ -193,12 +194,14 @@ export default function SubKriteria() {
                                     <h1 className="text-gray-700 font-semibold">
                                         {kriteria.kriteria} - {kriteria.kode}
                                     </h1>
+                                    <div className="space-x-2">
                                     <button
                                         className="bg-gray-800 text-white text-sm p-2 rounded hover:bg-gray-700 transition"
                                         onClick={() => toggleFormTambah(kriteria)}
                                     >
                                         Tambah Subkriteria
                                     </button>
+                                    </div>
                                 </div>
 
                                 <div className="relative overflow-x-auto sm:rounded-lg">
@@ -247,16 +250,13 @@ export default function SubKriteria() {
                             </div>
                         );
                     })
+                        ) : (
+                            <div className="text-gray-500 text-center mt-4">
+                                Tidak ada kriteria tipe kualitatif.
+                            </div>
+                            )
                     )}
 
-                    <div className="flex justify-end m-2">
-                        <button
-                            onClick={()=>navigate('/alternatif')}
-                            className="bg-gray-800 text-white text-sm p-2 rounded transition hover:bg-gray-700"
-                        >
-                            Oke
-                        </button>
-                    </div>
                     {/* area tabel */}
 
                 </div>

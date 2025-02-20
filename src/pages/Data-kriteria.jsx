@@ -155,7 +155,6 @@ export default function Kriteria() {
         }
     };
 
-    
     return (
         <>
             <div className="p-4 sm:ml-64">
@@ -203,31 +202,38 @@ export default function Kriteria() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {kriteria.map((item) => (
-                                    <tr key={item.id} className="odd:bg-white even:bg-gray-50 border-b">
-                                        <td className="px-6 py-4 w-1">{item.kode}</td>
-                                        <td className="px-6 py-4">{item.kriteria}</td>
-                                        <td className="px-6 py-4">{item.jenis}</td>
-                                        <td className="px-6 py-4">{item.bobot}</td>
-                                        <td className="px-6 py-4">{item.tipe}</td>
-                                        <td className="px-6 py-4 space-x-2">
-                                            <button
-                                                type="button"
-                                                onClick={() => toggleFormUbah(item)}
-                                                className="font-medium text-blue-600 hover:underline"
-                                            >
-                                                Ubah
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => handleDelete(item)}
-                                                className="font-medium text-red-600 hover:underline"
-                                            >
-                                                Hapus
-                                            </button>
-                                        </td>
+                                {
+                                kriteria.length > 0 ? (
+                                    kriteria.map((item) => (
+                                        <tr key={item.id} className="odd:bg-white even:bg-gray-50 border-b">
+                                            <td className="px-6 py-4 w-1">{item.kode}</td>
+                                            <td className="px-6 py-4">{item.kriteria}</td>
+                                            <td className="px-6 py-4">{item.jenis}</td>
+                                            <td className="px-6 py-4">{item.bobot}</td>
+                                            <td className="px-6 py-4">{item.tipe}</td>
+                                            <td className="px-6 py-4 space-x-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => toggleFormUbah(item)}
+                                                    className="font-medium text-blue-600 hover:underline"
+                                                >
+                                                    Ubah
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleDelete(item)}
+                                                    className="font-medium text-red-600 hover:underline"
+                                                >
+                                                    Hapus
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="6" className="text-center py-4">Tidak ada data</td>
                                     </tr>
-                                ))}
+                                )}
                             </tbody>
                         </table>
                     </div>

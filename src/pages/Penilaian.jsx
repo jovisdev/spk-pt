@@ -75,7 +75,8 @@ export default function PenilaianAlternatif() {
                     Penilaian Kandidat: {nama || "Tidak Diketahui"}
                 </h1>
                 <p className="text-gray-500">Kode Alternatif: {kode}</p>
-                <form onSubmit={handleAdd} className="space-y-4">
+                {kriteria.length > 0 ? (  
+                    <form onSubmit={handleAdd} className="space-y-4">
                     {kriteria.map((k) => (
                         <div key={k.id}>
                             <label className="block text-gray-700 font-medium mb-1">
@@ -125,7 +126,9 @@ export default function PenilaianAlternatif() {
                             Simpan
                         </button>
                     </div>
-                </form>
+                    </form>):(
+                        <p className="text-gray-500">Tidak ada kriteria yang tersedia.</p>
+                    )}
             </div>
         </div>)}
     </>

@@ -78,41 +78,57 @@ export default function HasilPerhitungan(){
                     </div>
                 ):(
                 <div>
-                <div ref={printRef} className="border-2 border-gray-200 p-4">
-                    <div className="text-center">
-                        <div className="flex justify-center w-full">
-                            <img className="w-72 mt-10" src={logocg} alt="" />
-                        </div>
-                        <h1 className="m-2 text-gray-700 text-lg font-semibold">Nilai Akhir</h1>
-                        <div className="relative overflow-x-auto sm:rounded-lg">
-                            <table className="w-full text-lg text-center text-gray-700">
-                                <thead className="text-lg text-gray-700 uppercase bg-gray-50">
-                                    <tr>
-                                        <th scope="col" className="px-6 py-3">Prioritas</th>
-                                        <th scope="col" className="px-6 py-3">Score</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {prioritas.length > 0 ? (
-                                    prioritas.map((item) => (
-                                        <tr className="odd:bg-white even:bg-gray-50 border-b">
-                                            <td className="px-6 py-4">{item.alternatif}</td>
-                                            <td className="px-6 py-4">{item.score}</td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan={prioritas.length + 2} className="px-6 py-4 text-center">
-                                            Tidak ada data.
-                                        </td>
-                                    </tr>
-                                )}
+                    <div ref={printRef}>
+                        <div className="px-4 py-2">
+                            <div className="flex justify-center w-full">
+                                <img className="w-3/4 mt-10" src={logocg} alt="" />
+                            </div>
+                            <div className="flex justify-center w-full">
+                                <h1 className="m-2 text-gray-700 text-3xl font-semibold">Sistem Rekrutmen Personal Trainer</h1>
+                            </div>
+                            <div className="flex justify-center w-full">
+                                <h1 className="mb-8 text-gray-700 text-3xl font-semibold">Nilai Akhir</h1>
+                            </div>
+                            <div className="flex justify-center w-full">
+                                <h1 className="mb-8 text-gray-700 text-3xl font-semibold">Dicetak : {new Date().toLocaleString()}</h1>
+                            </div>
+                            <div>
+                                <div className="relative overflow-x-auto sm:rounded-lg flex justify-center">
+                                    <table className="w-2/3 border-4 rounded text-4xl text-gray-700">
+                                        <thead className="text-left text-gray-700 uppercase bg-gray-50">
+                                            <tr>
+                                                <th className="px-6 py-3">Prioritas</th>
+                                                <th className="px-6 py-3 text-center">Nilai Akhir</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {prioritas.length > 0 ? (
+                                            prioritas.map((item) => (
+                                                <tr className="odd:bg-white even:bg-gray-50 border-b">
+                                                    <td className="px-6 py-4">{item.alternatif}</td>
+                                                    <td className="px-6 py-4 text-center">{item.score}</td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan={prioritas.length + 2} className="px-6 py-4 text-center">
+                                                    Tidak ada data.
+                                                </td>
+                                            </tr>
+                                        )}
 
-                                </tbody>
-                            </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div className="flex justify-center w-full">
+                                    <h1 className="mt-8 text-gray-700 text-3xl font-semibold">Diketahui Oleh</h1>
+                                </div>
+                                <div className="flex justify-center w-full">
+                                    <h1 className="mt-36 underline text-gray-700 text-3xl font-semibold">Jamalludin Basalamah</h1>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
                 <div className="flex justify-end m-2">
                     <button
                         type="button"
