@@ -146,13 +146,6 @@ export default function UserManagement() {
                             )}
                             </tbody>
                         </table>
-                        <div className="flex justify-end m-2">
-                            <button
-                                className="bg-gray-800 text-white text-sm p-2 rounded transition hover:bg-gray-700"
-                            >
-                                Oke
-                            </button>
-                        </div>
                     </div>
                             )}
                 </div>

@@ -121,7 +121,7 @@ export default function Signin(){
                             id="password"
                             name="password"
                             type="password"
-                            placeholder="6+ Characters, 1 Capital letter"
+                            placeholder="Password"
                             className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none"
                             />
 
@@ -154,6 +154,10 @@ export default function Signin(){
                             onClick={handleLogin} type="button"
                             className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90 bg-black"
                         >Masuk</button>
+                        </div>
+
+                        <div className="text-center text-gray-700">
+                            <p>Hubungi <strong>Super Admin</strong> jika anda lupa password atau anda adalah user baru.</p>
                         </div>
                     </form>
                     </div>

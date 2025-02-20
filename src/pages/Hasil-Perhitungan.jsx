@@ -97,14 +97,16 @@ export default function HasilPerhitungan(){
                                     <table className="w-2/3 border-4 rounded text-4xl text-gray-700">
                                         <thead className="text-left text-gray-700 uppercase bg-gray-50">
                                             <tr>
+                                                <th className="px-6 py-3">No</th>
                                                 <th className="px-6 py-3">Prioritas</th>
                                                 <th className="px-6 py-3 text-center">Nilai Akhir</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         {prioritas.length > 0 ? (
-                                            prioritas.map((item) => (
+                                            prioritas.map((item,index) => (
                                                 <tr className="odd:bg-white even:bg-gray-50 border-b">
+                                                    <td className="px-6 py-4">{index + 1}</td>
                                                     <td className="px-6 py-4">{item.alternatif}</td>
                                                     <td className="px-6 py-4 text-center">{item.score}</td>
                                                 </tr>
