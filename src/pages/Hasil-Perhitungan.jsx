@@ -81,7 +81,7 @@ export default function HasilPerhitungan(){
                     <div ref={printRef}>
                         <div className="px-4 py-2">
                             <div className="flex justify-center w-full">
-                                <img className="w-3/4 mt-10" src={logocg} alt="" />
+                                <img className="w-2/3 mt-6" src={logocg} alt="" />
                             </div>
                             <div className="flex justify-center w-full">
                                 <h1 className="m-2 text-gray-700 text-3xl font-semibold">Sistem Rekrutmen Personal Trainer</h1>
