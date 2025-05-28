@@ -269,6 +269,9 @@ export default function Sidenav() {
               </button>
             </li>
           </ul>
+          <div className="mt-10 p-2">
+            <p className="text-gray-700 text-sm">© 2025 Jovis Jocunda.</p>
+          </div>
         </div>
       </aside>
     </>
